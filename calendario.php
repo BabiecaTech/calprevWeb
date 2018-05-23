@@ -118,7 +118,7 @@
 
 <?php
 
-include("include/menu.php");
+include("menu.php");
 
 ?>
 <body>
