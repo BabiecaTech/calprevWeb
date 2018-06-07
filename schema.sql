@@ -19,6 +19,7 @@ CREATE TABLE login (
   email varchar(100) NOT NULL,
   pasadmin varchar(25) NOT NULL,
   rol int(3) NOT NULL,
+  id_finca int(10),
   CONSTRAINT login_pk PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -33,11 +34,42 @@ CREATE TABLE events (
   CONSTRAINT events_pk PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-ALTER TABLE events ADD FOREIGN KEY(id_user) REFERENCES login(id);
+DROP TABLE IF EXISTS fincas; -- fincas
+CREATE TABLE fincas (
+  id int(10) NOT NULL,
+  nombre varchar(200) NOT NULL,
+  hectareas int(10) NOT NULL,
+  latitud float,
+  longitud float,
+  id_tipo int(10),
+  CONSTRAINT finca_pk PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+DROP TABLE IF EXISTS vinedos; -- viñedos
+CREATE TABLE vinedos (
+  id int(10) NOT NULL,
+  nombre varchar(200) NOT NULL,
+  CONSTRAINT vinedo_pk PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+ALTER TABLE events ADD FOREIGN KEY(id_user) REFERENCES login(id);
+ALTER TABLE login ADD FOREIGN KEY(id_finca) REFERENCES fincas(id);
+ALTER TABLE fincas ADD FOREIGN KEY(id_tipo) REFERENCES vinedos(id);
 --
 -- insertar datos
 --
+
+INSERT INTO vinedos (id,nombre) VALUES (1,'malbec'),
+(2,'cabernet'),
+(3,'bonarda'),
+(4,'syrah'),
+(5,'tempranillo'),
+(6,'tintasgenericas blancas'),
+(7,'chardonnay'),
+(8,'soivignon');
+
+INSERT INTO fincas (id, nombre, hectareas, latitud, longitud, id_tipo) VALUES
+(1, 'finca prueba', 20, -33.1867, -68.3929, 1);
 
 INSERT INTO login (id, user, password, email, pasadmin, rol) VALUES
 (1, 'Administrador', '', 'admin@gmail.com', '123456', 1),
