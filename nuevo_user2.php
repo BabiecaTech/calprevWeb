@@ -7,13 +7,12 @@
 	$rol = $_POST['rol'];
 
 	//echo ($rol);
-	if ($rol == "administrador"){
-		NuevoUsuario($user,$email,$contraseña,1);
-	}else if ($rol == "encargado"){
+	}if ($rol == "encargado"){
 		NuevoUsuario($user,$email,$contraseña,2);
 	}else if ($rol == "empleado"){
 		NuevoUsuario($user,$email,$contraseña,3);
 	}
+	
 	function NuevoUsuario($usuario,$email,$contraseña,$rol)
 	{
 		require("conexion.php");

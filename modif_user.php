@@ -49,12 +49,10 @@
           <td><select name ="rol">
             <?php $rol=$consulta[2];
             if ($rol == 2){?>
-              <option value="Administrador">Administrador</option>
               <option value="Encargado" selected>Encargado</option>
               <option value="Empleado">Empleado</option>
             <?php
             }else if ($rol==3){?>
-              <option value="Administrador">Administrador</option>
               <option value="Encargado">Encargado</option>
               <option value="Empleado" selected>Empleado</option>
             <?php

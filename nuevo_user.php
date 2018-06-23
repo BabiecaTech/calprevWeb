@@ -38,7 +38,6 @@
           <td><label>Rol: </label></td>
           <td><select name ="rol">
               <option value="seleccione">Seleccione</option>
-              <option value="administrador">Administrador</option>
               <option value="encargado">Encargado</option>
               <option value="empleado">Empleado</option>            
           </select></td>
