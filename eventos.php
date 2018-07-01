@@ -6,14 +6,33 @@ $accion = (isset($_GET['accion']))?$_GET['accion']:'leer';
 switch ($accion) {
 	case 'agregar':
 		# code...
-			$sql=$con->prepare("INSERT INTO events(title,descripcion,color,start,end,id_user) VALUES (:title,:descripcion,:color,:start,:end,:id_user)");
+			$sql=$con->prepare("INSERT INTO events(title,descripcion,costo,color,start,end,asignar,id_user) VALUES (:title,:descripcion,:costo,:color,:start,:end,:asignar,:id_user)");
 
 			$respuesta=$sql->execute(array(
 				'title' =>$_POST['title'],
 				'descripcion' =>$_POST['descripcion'],
+				'costo' =>$_POST['costo'],
 				'color' =>'#167EAF',
 				'start' =>$_POST['start'],
 				'end' =>$_POST['end'],
+				'asignar' =>$_POST['asignar'],
+				'id_user' =>$_POST['id_user']
+			 ));
+			echo json_encode($respuesta);
+		break;
+
+	case 'agregard':
+		# code...
+			$sql=$con->prepare("INSERT INTO events(title,descripcion,costo,color,start,end,asignar,id_user) VALUES (:title,:descripcion,:costo,:color,:start,:end,:asignar,:id_user)");
+
+			$respuesta=$sql->execute(array(
+				'title' =>$_POST['title'],
+				'descripcion' =>$_POST['descripcion'],
+				'costo' =>$_POST['costo'],
+				'color' =>'#167EAF',
+				'start' =>$_POST['start'],
+				'end' =>$_POST['end'],
+				'asignar'=>$_POST['asignar'],
 				'id_user' =>$_POST['id_user']
 			 ));
 			echo json_encode($respuesta);
@@ -33,18 +52,22 @@ switch ($accion) {
 			$sql=$con->prepare("UPDATE events SET 
 				title=:title, 
 				descripcion=:descripcion,
+				costo=:costo,
 				color=:color,
 				start=:start,
 				end=:end,
+				asignar=:asignar,
 				id_user=:id_user
 				WHERE id=:ID");
 			$respuesta=$sql->execute(array(
 				'ID' =>$_POST['id'],
 				'title' =>$_POST['title'],
 				'descripcion' =>$_POST['descripcion'],
+				'costo' =>$_POST['costo'],
 				'color' =>'#167EAF',
 				'start' =>$_POST['start'],
 				'end' =>$_POST['end'],
+				'asignar' =>$_POST['asignar'],
 				'id_user' =>$_POST['id_user']
 			 ));
 			echo json_encode($respuesta);

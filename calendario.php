@@ -1,7 +1,10 @@
 <?php
-  include_once("conexion.php");
-  $result_events = "SELECT id, title, color, start, end FROM events";
-  $resultado = mysqli_query($conn, $result_events);
+  include("conexion.php");
+  //$result_events = "SELECT id, title, color, start, end FROM events";
+  //$resultado = mysqli_query($conn, $result_events);
+  $result_login = "SELECT * FROM login";
+  $resultado = mysqli_query($conn, $result_login);
+  $resultado1 = mysqli_query($conn, $result_login);
 ?>
 <!DOCTYPE html>
 <?php
@@ -54,6 +57,28 @@
         center: 'title',
         right: 'month,agendaWeek,agendaDay'
       },
+      
+      defaultDate: new Date(),
+      editable: true,
+      navLinks: true, // can click day/week names to navigate views
+      businessHours: true,
+      eventLimit: true,
+      droppable: true,
+      drop: function(date, jsEvent , ui , resourceId ) {
+       var t = {title:$.trim($(this).text()),
+                descripcion:'',
+                costo:0,
+                start:date.format(),
+                end:date.format(),
+                asignar:<?php echo $_SESSION['id'] ?>,
+                id_user:<?php echo $_SESSION['id'] ?>
+              }
+      enviarDatos('agregard',t,true);
+      },
+      
+       // this allows things to be dropped onto the calendar
+    
+      events: 'http://localhost:8080/Ingenieria/caleprevWeb/eventos.php',
 
       dayClick:function(date,jsEvent,view){
         //alert(date.format());
@@ -61,31 +86,47 @@
         $('#txtDescA').val("");
         $('#txtTituloA').val("");
         $('#txtHoraA').val("06:00");
+        $('#numCostoA').val("0");
+        $('asignadaA').val("");
         $('#agregarModal').modal();
       },
-      
-      defaultDate: new Date(),
-      navLinks: true, // can click day/week names to navigate views
-      businessHours: true, // display business hours
-      editable: true,
-      droppable: true, // this allows things to be dropped onto the calendar
-    
-      events: 'http://localhost:8080/Ingenieria/caleprevWeb/eventos.php',
 
       eventClick:function(calEvent,jsEvent,view){
         $('#tituloEvento').html(calEvent.title);
         $('#txtDesc').val(calEvent.descripcion);
+        $('#numCosto').val(calEvent.costo);
+        $('#asignada').val(calEvent.asignar);
         $('#txtId').val(calEvent.id);
         $('#txtTitulo').val(calEvent.title);
 
-        var fechaHora = calEvent.start._i.split(" ");
+        var fechaHora = calEvent.start.format().split("T");
         $('#txtFecha').val(fechaHora[0]);
         $('#txtHora').val(fechaHora[1]);
 
         $('#vistaModal').modal();
       },
-      editable:true,
+     // editable:true,
       eventDrop:function(calEvent){
+        $('#txtId').val(calEvent.id);
+        $('#txtTitulo').val(calEvent.title);
+        $('#txtDesc').val(calEvent.descripcion);
+        $('#numCosto').val(calEvent.costo);
+        $('#asignada').val(calEvent.asignar);
+
+        var fechaHora = calEvent.start.format().split("T");
+        $('#txtFecha').val(fechaHora[0]);
+        $('#txtHora').val(fechaHora[1]);
+
+        recolectarDatosM();
+        enviarDatos('modificar',tarea,true);
+
+      },
+      eventResize: function/*(event, delta, revertFunc)*/(calEvent) {
+        alert(calEvent.end.format());
+    //alert(event.title + " end is now " + event.end.format());
+
+    /*if (confirm("desea relizar la modificacion?")) {
+  
         $('#txtId').val(calEvent.id);
         $('#txtTitulo').val(calEvent.title);
         $('#txtDesc').val(calEvent.descripcion);
@@ -96,8 +137,18 @@
 
         recolectarDatosM();
         enviarDatos('modificar',tarea,true);
+    }*/
 
-      }
+  },
+  eventMouseover: function(event, jsEvent, view) {
+    //$('.fc-event-inner', this).append('<div id=\"'+event.id+'\" //class=\"hover-end\">'+'</div>');
+},
+
+eventMouseout: function(event, jsEvent, view) {
+    //$('#'+event.id).remove();
+}
+
+
     });
 
   });
@@ -164,8 +215,8 @@
       </div>
       <div class="modal-body">
         
-        <input type="hidden" id="txtId" name="txtId" /><br/>
-        Fecha: <input type="text" id="txtFecha" name="txtFecha" /><br/>
+        <input type="text" id="txtId" name="txtId" /><br/>
+        Fecha: <input type="date" id="txtFecha" name="txtFecha" /><br/>
         Tarea: <select id = "txtTitulo" name ="txtTitulo">
               <option value="seleccione">Seleccione</option>
               <option value="Arar">Arar</option>
@@ -173,8 +224,17 @@
               <option value="Curacion">Curacion</option>
               <option value="Riego">Riego</option>              
           </select><!--<input type="text" id="txtTitulo" name="txtTitulo" />--><br/>
-        Hora: <input type="text" id="txtHora" name="txtHora" value="06:00" /><br/>
+        Hora: <input type="time" id="txtHora" name="txtHora" value="06:00" /><br/>
         Descripcion: <textarea id="txtDesc" rows="3"> </textarea><br/>
+        Costo $: <input type="number" id="numCosto" name="numCosto" value="0"><br/>
+        Asignar a: <select id = "asignada" name ="asignada">
+          <?php 
+            while($fila = mysqli_fetch_assoc($resultado)){?>
+              <option value=<?php echo $fila['user'] ?>><?php echo $fila['user'] ?></option>
+            <?php
+            }
+            ?>
+            </select><br/>
       </div>
       <div class="modal-footer">
         
@@ -199,16 +259,25 @@
       </div>
       <div class="modal-body">
         <!--<div id="descripcionEvento"></div>-->
-        <input type="hidden" id="txtIdA" name="txtId" /><br/>
-        Fecha: <input type="text" id="txtFechaA" name="txtFecha" /><br/>
+        <input type="text" id="txtIdA" name="txtId" /><br/>
+        Fecha: <input type="date" id="txtFechaA" name="txtFecha" /><br/>
         Tarea: <select id = "txtTituloA" name ="txtTituloA">
               <option value="Arar">Arar</option>
               <option value="Poda">Poda</option>
               <option value="Curacion">Curacion</option>
               <option value="Riego">Riego</option>
             </select><br/>
-        Hora: <input type="text" id="txtHoraA" name="txtHora" value="06:00" /><br/>
+        Hora: <input type="time" id="txtHoraA" name="txtHoraA" value="06:00" /><br/>
         Descripcion: <textarea id="txtDescA" rows="3"> </textarea><br/>
+        Costo $: <input type="number" id="numCostoA" name="numCostoA" value="0"><br/>
+        Asignar a: <select id = "asignadaA" name ="asignadaA">
+          <?php 
+            while($fila = mysqli_fetch_assoc($resultado1)){?>
+              <option value=<?php echo $fila['user'] ?>><?php echo $fila['user'] ?></option>
+            <?php
+            }
+            ?>
+            </select><br/>
         <input type="hidden" id="idUser" name="idUser" value=<?php echo $_SESSION['id'] ?> />
       </div>
       <div class="modal-footer">
@@ -248,8 +317,11 @@
       id:$('#txtIdA').val(),
       title:$('#txtTituloA').val(),
       descripcion:$('#txtDescA').val(),
+      costo:$('#numCostoA').val(),
+      asignar:$('#asignadaA').val(),
       start:$('#txtFechaA').val()+" "+$('#txtHoraA').val(),
       end:$('#txtFechaA').val()+" "+$('#txtHoraA').val(),
+      asignar:$('#asignadaA').val(),
       id_user:<?php echo $_SESSION['id'] ?>
   };
 }
@@ -259,8 +331,10 @@ function recolectarDatosM(){
       id:$('#txtId').val(),
       title:$('#txtTitulo').val(),
       descripcion:$('#txtDesc').val(),
+      costo:$('#numCosto').val(),
       start:$('#txtFecha').val()+" "+$('#txtHora').val(),
       end:$('#txtFecha').val()+" "+$('#txtHora').val(),
+      asignar:$('#asignada').val(),
       id_user:<?php echo $_SESSION['id'] ?>
   };
 }
@@ -272,6 +346,9 @@ function enviarDatos(accion,objEvento,modal){
       data:objEvento,
       success:function(msg){
         if(msg){
+          if (accion=='agregard'){
+            location.reload();
+          }else{
           $('#calendar').fullCalendar('refetchEvents');
           if(accion=='agregar'){
             $('#agregarModal').modal('toggle');
@@ -281,6 +358,7 @@ function enviarDatos(accion,objEvento,modal){
             }
             
           }
+        }
           
         }
       },
