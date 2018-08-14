@@ -20,7 +20,7 @@ CREATE TABLE events (
   CONSTRAINT events_pk PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-DROP TABLE IF EXISTS login; -- users
+DROP TABLE IF EXISTS usuariios; -- users
 CREATE TABLE usuarios (
   id int(10) NOT NULL AUTO_INCREMENT,
   user varchar(50) NOT NULL,
@@ -43,6 +43,17 @@ CREATE TABLE fincas (
   CONSTRAINT finca_pk PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+DROP TABLE IF EXISTS ;
+CREATE TABLE fincas (
+  id int(10) NOT NULL,
+  nombre varchar(100) NOT NULL,
+  hectareas int(10) NOT NULL,
+  latitud float,
+  longitud float,
+  id_tipo int(10),
+  CONSTRAINT finca_pk PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 DROP TABLE IF EXISTS vinedos; -- viñedos
 CREATE TABLE vinedos (
   id int(10) NOT NULL,
@@ -50,9 +61,48 @@ CREATE TABLE vinedos (
   CONSTRAINT vinedo_pk PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+DROP TABLE IF EXISTS finvin; -- viñedos
+CREATE TABLE finvin (
+  id int(20) NOT NULL,
+  id_finca int(10) NOT NULL,
+  id_vinedo int(10) NOT NULL,
+  cant_hectarea int(10) NOT NULL,
+  CONSTRAINT finvin_pk PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS prodias; -- pronosticos dia
+CREATE TABLE prodias (
+  fecha date NOT NULL,
+  temperaturaMin int(4),
+  temperaturaMax int(4),
+  humedad int(4),
+  presion int(5),
+  viento int(4),
+  probLluvia int(4),
+  faseLunar int(4),
+  id_finca int(10) NOT NULL,
+  CONSTRAINT pdias_pk PRIMARY KEY (fecha)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS prohoras; -- pronosticos horas
+CREATE TABLE prohoras (
+  fecha date NOT NULL,
+  hora int (2) NOT NULL,
+  temperatura int(4),
+  humedad int(4),
+  presion int(5),
+  viento int(4),
+  probLluvia int(4),
+  CONSTRAINT prohoras_pk PRIMARY KEY (fecha,hora)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 ALTER TABLE events ADD FOREIGN KEY(id_user) REFERENCES usuarios(id);
 ALTER TABLE usuarios ADD FOREIGN KEY(id_finca) REFERENCES fincas(id);
 ALTER TABLE fincas ADD FOREIGN KEY(id_tipo) REFERENCES vinedos(id);
+ALTER TABLE finvin ADD FOREIGN KEY(id_finca) REFERENCES fincas(id);
+ALTER TABLE finvin ADD FOREIGN KEY(id_vinedo) REFERENCES vinedos(id);
+ALTER TABLE prodias ADD FOREIGN KEY(id_finca) REFERENCES fincas(id);
+ALTER TABLE prohoras ADD FOREIGN KEY(fecha) REFERENCES prodias(fecha);
 --
 -- insertar datos
 --

@@ -12,9 +12,9 @@
   if (@!$_SESSION['user']) {
 
     header("Location:index.php");
-  }elseif ($_SESSION['rol']==1) {
-    header("Location:admin.php");
-  }
+  }//elseif ($_SESSION['rol']==1) {
+   // header("Location:admin.php");
+  //}
   ?>
 <html>
 <head>
@@ -33,6 +33,30 @@
 <script>
 
    $(document).ready(function() {
+   		
+
+   	$('.menu2 li:has(ul)').click(function(e){
+   		e.preventDefault();
+
+   		if ($(this).hasClass('activado')){
+   			$(this).removeClass('activado');
+   			$(this).children('ul').slideUp();
+   		}else{
+   			$('.menu2 li ul').slideUp();
+   			$('.menu2 li').removeClass('activado');
+   			$(this).addClass('activado');
+   			
+   			$(this).children('ul').slideDown();
+   			if ($(this).attr('id') == 2){
+   				
+   				var arreglo = {
+   					'eve': 'temp'
+   				};
+   				enviarDatos('leer',arreglo);
+   			}
+   		}
+
+   	});
 
      $('#external-events .fc-event').each(function() {
 
@@ -65,6 +89,9 @@
       eventLimit: true,
       droppable: true,
       drop: function(date, jsEvent , ui , resourceId ) {
+      	var moment = $('#calendar').fullCalendar('getDate').format().split("T");
+      	var fechaHora = date.format();
+      	if (fechaHora >= moment[0]){
        var t = {title:$.trim($(this).text()),
                 descripcion:'',
                 costo:0,
@@ -74,14 +101,23 @@
                 id_user:<?php echo $_SESSION['id'] ?>
               }
       enviarDatos('agregard',t,true);
+  }else{
+        	alert("Fecha no permitida para asignar la tarea");
+        	//$('#calendar').fullCalendar('refetchEvents');
+        	location.reload();
+        }
       },
       
        // this allows things to be dropped onto the calendar
-    
-      events: 'http://localhost:8080/Ingenieria/caleprevWeb/eventos.php',
+    	//'http://localhost:8080/Ingenieria/caleprevWeb/eventos.php'
+      //events: a,
+      eventSources:['http://localhost:8080/Ingenieria/caleprevWeb/eventos.php?accion=leer'],
 
       dayClick:function(date,jsEvent,view){
         //alert(date.format());
+        var moment = $('#calendar').fullCalendar('getDate').format().split("T");
+      	var fechaHora = date.format();
+      	if (fechaHora >= moment[0]){
         $('#txtFechaA').val(date.format());
         $('#txtDescA').val("");
         $('#txtTituloA').val("");
@@ -89,9 +125,17 @@
         $('#numCostoA').val("0");
         $('asignadaA').val("");
         $('#agregarModal').modal();
+    }else{
+        	alert("Fecha no permitida para asignar la tarea");
+        	$('#calendar').fullCalendar('refetchEvents');
+        }
+
       },
 
       eventClick:function(calEvent,jsEvent,view){
+      	var moment = $('#calendar').fullCalendar('getDate').format().split("T");
+      	var fechaHora = calEvent.start.format().split("T");
+      	if (fechaHora[0] >= moment[0]){
         $('#tituloEvento').html(calEvent.title);
         $('#txtDesc').val(calEvent.descripcion);
         $('#numCosto').val(calEvent.costo);
@@ -99,26 +143,37 @@
         $('#txtId').val(calEvent.id);
         $('#txtTitulo').val(calEvent.title);
 
-        var fechaHora = calEvent.start.format().split("T");
         $('#txtFecha').val(fechaHora[0]);
         $('#txtHora').val(fechaHora[1]);
 
         $('#vistaModal').modal();
+    	}else{
+        	alert("La Tarea ya no puede ser Modificada");
+        	//$('#calendar').fullCalendar('refetchEvents');
+        }
       },
      // editable:true,
       eventDrop:function(calEvent){
-        $('#txtId').val(calEvent.id);
-        $('#txtTitulo').val(calEvent.title);
-        $('#txtDesc').val(calEvent.descripcion);
-        $('#numCosto').val(calEvent.costo);
-        $('#asignada').val(calEvent.asignar);
 
-        var fechaHora = calEvent.start.format().split("T");
-        $('#txtFecha').val(fechaHora[0]);
-        $('#txtHora').val(fechaHora[1]);
+      	var moment = $('#calendar').fullCalendar('getDate').format().split("T");
+      	var fechaHora = calEvent.start.format().split("T");
+      	if (fechaHora[0] >= moment[0]){
+  			
+        	$('#txtId').val(calEvent.id);
+        	$('#txtTitulo').val(calEvent.title);
+        	$('#txtDesc').val(calEvent.descripcion);
+        	$('#numCosto').val(calEvent.costo);
+        	$('#asignada').val(calEvent.asignar);
+        
+        	$('#txtFecha').val(fechaHora[0]);
+        	$('#txtHora').val(fechaHora[1]);
 
         recolectarDatosM();
         enviarDatos('modificar',tarea,true);
+        }else{
+        	alert("Fecha no permitida para asignar la tarea");
+        	$('#calendar').fullCalendar('refetchEvents');
+        }
 
       },
       eventResize: function/*(event, delta, revertFunc)*/(calEvent) {
@@ -156,21 +211,29 @@ eventMouseout: function(event, jsEvent, view) {
 </script>
 
 <style>
- 
+
+
+ * {
+ 	margin: 0;
+ 	padding: 0;
+ 	box-sizing: border-box;
+ }	
   #wrap {
-    width: 1100px;
-    margin: 0,auto;
+    width: 100%;
+    margin: auto;
   }
 
   #external-events {
+  	float: left;
+    width: 20%;
+  }
+
+  #external-events .menu2 {
     margin-top: 10px;
-    margin-bottom: 10px;
-    float: left;
-    width: 150px;
-    padding: 0 10px;
+    margin-left: 10px;
+    padding: 5px;
     border: 1px solid #ccc;
     background: #eee;
-    text-align: left;
   }
 
   #external-events h4 {
@@ -180,7 +243,7 @@ eventMouseout: function(event, jsEvent, view) {
   }
 
   #external-events .fc-event {
-    margin: 10px 0;
+    margin: 5px 0;
     cursor: pointer;
   }
 
@@ -197,9 +260,39 @@ eventMouseout: function(event, jsEvent, view) {
 
   #calendar {
     float: right;
-    margin-top: 10px;
-    width: 900px;
+    margin: 10px;
+    width: 75%;
   }
+
+  .menu2 {
+  	width: 20%;
+  	min-width: 300px;
+  	display: inline-block;
+  }
+  ul {
+  	list-style: none;
+  }
+  .menu2 li a {
+  	display: block;
+  	text-decoration: none;
+  	background: #e9e9e9;
+  	color: #494949;
+  }
+
+  .menu2 li a:hover {
+  	background: #1a95d5;
+  	color: #fff;
+  }
+  .menu2 ul {
+  	display: none;
+  }
+
+  .menu2 .activado > a{
+  	background: #1a95d5;
+  	color: #fff;
+  }
+
+
 
 </style>
 </head>
@@ -222,7 +315,9 @@ eventMouseout: function(event, jsEvent, view) {
               <option value="Arar">Arar</option>
               <option value="Poda">Poda</option>
               <option value="Curacion">Curacion</option>
-              <option value="Riego">Riego</option>              
+              <option value="Riego">Riego</option>
+              <option value="Riego">Desorrillar</option>
+              <option value="Riego">Desbrote</option>              
           </select><!--<input type="text" id="txtTitulo" name="txtTitulo" />--><br/>
         Hora: <input type="time" id="txtHora" name="txtHora" value="06:00" /><br/>
         Descripcion: <textarea id="txtDesc" rows="3"> </textarea><br/>
@@ -266,6 +361,8 @@ eventMouseout: function(event, jsEvent, view) {
               <option value="Poda">Poda</option>
               <option value="Curacion">Curacion</option>
               <option value="Riego">Riego</option>
+              <option value="Riego">Desorrillar</option>
+              <option value="Riego">Desbrote</option>
             </select><br/>
         Hora: <input type="time" id="txtHoraA" name="txtHoraA" value="06:00" /><br/>
         Descripcion: <textarea id="txtDescA" rows="3"> </textarea><br/>
@@ -289,7 +386,7 @@ eventMouseout: function(event, jsEvent, view) {
   </div>
 </div>
 <script type="text/javascript">
-  var nuevo, tarea;
+  var nuevo, tarea, datos, id_finca;
   $('#btnAgregar').click(function(){
     recolectarDatos();
     /*$('#calendar').fullCalendar('renderEvent',nuevo);
@@ -311,6 +408,22 @@ eventMouseout: function(event, jsEvent, view) {
     enviarDatos('modificar',tarea);
 
   });
+
+  $('#btnActualizar').click(function(){
+
+    enviarDatos('actualizar',id_finca);
+
+  });
+
+  $('#btnCargar').click(function(){
+
+  });
+
+  function obtenerFinca(){
+  	id_finca = {
+  		id_finca:1
+  	}
+  }
 
   function recolectarDatos(){
     nuevo = {
@@ -339,15 +452,35 @@ function recolectarDatosM(){
   };
 }
 
+function actualizarRegla(accion,arreglo){
+	$.ajax({
+		type:'POST',
+      	url:'eventos.php?accion='+accion,
+      	data:arreglo,
+      	success:function(msg){
+      		console.log(msg);
+      		//$('#calendar').fullCalendar('refetchEvents');
+      	},
+      	error:function(msg){
+        alert("Error conexion base de datos...");
+      }
+	});
+}
+
 function enviarDatos(accion,objEvento,modal){
   $.ajax({
       type:'POST',
       url:'eventos.php?accion='+accion,
       data:objEvento,
       success:function(msg){
+        console.log(msg);
+        if (accion=='leer'){
+      
+        }
         if(msg){
           if (accion=='agregard'){
             location.reload();
+            //$('#calendar').fullCalendar('refetchEvents');
           }else{
           $('#calendar').fullCalendar('refetchEvents');
           if(accion=='agregar'){
@@ -356,10 +489,9 @@ function enviarDatos(accion,objEvento,modal){
             if(!modal){
               $('#vistaModal').modal('toggle');
             }
-            
           }
         }
-          
+     
         }
       },
       error:function(msg){
@@ -377,18 +509,59 @@ include("menu.php");
   <div id='wrap'>
 
     <div id='external-events'>
-      <div>
-      <h4>TAREAS</h4>
-      <div class='fc-event'>Arar</div>
-      <div class='fc-event'>Desorrillar</div>
-      <div class='fc-event'>Curaciones</div>
-      <div class='fc-event'>Poda</div>
-      <div class='fc-event'>Desbrote</div>
-      <div class='fc-event'>Riego</div>
-      </div>
+     
+      <ul class="menu2">
+      	<li id="1"><a href="">Tareas sobre la planta</a>
+      		<ul>
+      			<li><div class='fc-event'>Desbrotar</div>
+      			<div class='fc-event'>Despegar Malla Antigranizo</div>
+      			<div class='fc-event'>Despuntar</div>
+      			<div class='fc-event'>Levantar Malla para Cosecha</div>
+      			<div class='fc-event'>Poda</div>
+      			<div class='fc-event'>Atada</div>
+      			<div class='fc-event'>Armado de Barbechos</div>
+      			<div class='fc-event'>Injertos</div></li>
+
+      		</ul>
+
+      	</li>
+      	<li id="2"><a href="">Tareas de movimiento de tierra</a>
+      		<ul>
+      			<li><div class='fc-event'>Desorillar</div>
+      			<div class='fc-event'>Rastrear</div>
+      			<div class='fc-event'>Tapar</div>
+      			<div class='fc-event'>Replantar y hacer Mugrones</div></li>
+      		</ul>
+
+      	</li>
+      	<li id="3"><a href="">Tareas de Sanidad</a>
+      		<ul>
+      			<li><div class='fc-event'>Curación Azufre (prevencion Quintal)</div>
+      			<div class='fc-event'>Herbicidas</div>
+      			<div class='fc-event'>Curación a base de sulfato (prevención de Poronospera)</div>
+      			<div class='fc-event'>Curación preventiva para Polilla de la Vid</div></li>
+      		</ul>
+      	</li>
+      	<li id="4"><a href="">Tareas de Riego</a>
+      		<ul><li>
+      			<div class='fc-event'>Riego</div>
+      			<div class='fc-event'>Acentar</div></li>
+      		</ul>
+      	</li>
+      	<li id="5"><a href="">Vendimia</a>
+      		<ul><li>
+      			<div class='fc-event'>Cosecha</div></li>
+      		</ul>
+      	</li>
+  
+      </ul>
+    
     </div>
+
     <div id='calendar'></div>
     <div style='clear:both'></div>
+   <!--<button type="button" id="btnActualizar" class="btn btn-success">Actualizar DB</button>-->
+    <button type="button" id="btnCargar" class="btn btn-primary">Cargar datos</button>
   </div>
 </body>
 </html>
