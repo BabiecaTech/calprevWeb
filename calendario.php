@@ -33,7 +33,7 @@
 <script>
 
    $(document).ready(function() {
-   		
+   		var t =0;
 
    	$('.menu2 li:has(ul)').click(function(e){
    		e.preventDefault();
@@ -41,18 +41,25 @@
    		if ($(this).hasClass('activado')){
    			$(this).removeClass('activado');
    			$(this).children('ul').slideUp();
+   			$('#calendar').fullCalendar('removeEventSource', $('#calendar').fullCalendar('getEventSources')[1]);
    		}else{
    			$('.menu2 li ul').slideUp();
    			$('.menu2 li').removeClass('activado');
+   			if($('#calendar').fullCalendar ('getEventSources').length >1){
+   				$('#calendar').fullCalendar('removeEventSource', $('#calendar').fullCalendar('getEventSources')[1]);
+   			}
    			$(this).addClass('activado');
    			
    			$(this).children('ul').slideDown();
-   			if ($(this).attr('id') == 2){
-   				
-   				var arreglo = {
-   					'eve': 'temp'
-   				};
-   				enviarDatos('leer',arreglo);
+   			if ($(this).attr('id') ==2){
+   				t=2;
+   				actualizarRegla('cargar');
+   				}
+   			if ($(this).attr('id') ==3){
+   				actualizarRegla('humedad');
+   			}
+   			if ($(this).attr('id') ==7){
+   				actualizarRegla('viento');
    			}
    		}
 
@@ -111,7 +118,9 @@
        // this allows things to be dropped onto the calendar
     	//'http://localhost:8080/Ingenieria/caleprevWeb/eventos.php'
       //events: a,
-      eventSources:['http://localhost:8080/Ingenieria/caleprevWeb/eventos.php?accion=leer'],
+      eventSources:[{
+      	url:'http://localhost:8080/Ingenieria/caleprevWeb/eventos.php?accion=leer',
+      	id:'inicio'}],
 
       dayClick:function(date,jsEvent,view){
         //alert(date.format());
@@ -452,17 +461,18 @@ function recolectarDatosM(){
   };
 }
 
-function actualizarRegla(accion,arreglo){
-	$.ajax({
+function actualizarRegla(accion){
+		$.ajax({
 		type:'POST',
       	url:'eventos.php?accion='+accion,
-      	data:arreglo,
       	success:function(msg){
-      		console.log(msg);
-      		//$('#calendar').fullCalendar('refetchEvents');
+      		
+      		$('#calendar').fullCalendar ('addEventSource', msg);
+      		$('#calendar').fullCalendar('refetchEvents');
+      	
       	},
       	error:function(msg){
-        alert("Error conexion base de datos...");
+        alert("Error conexion base de datos..."); 
       }
 	});
 }
@@ -473,9 +483,9 @@ function enviarDatos(accion,objEvento,modal){
       url:'eventos.php?accion='+accion,
       data:objEvento,
       success:function(msg){
-        console.log(msg);
-        if (accion=='leer'){
-      
+    
+        if (accion=='cargar'){
+        	console.log(msg);
         }
         if(msg){
           if (accion=='agregard'){
@@ -551,6 +561,21 @@ include("menu.php");
       	<li id="5"><a href="">Vendimia</a>
       		<ul><li>
       			<div class='fc-event'>Cosecha</div></li>
+      		</ul>
+      	</li>
+      	<li id="6"><a href="">Mantenimiento</a>
+      		<ul><li>
+      			<div class='fc-event'>Canales y Acequias</div>
+      			<div class='fc-event'>Cambio maderas</div>
+      			<div class='fc-event'>Tensado y Colocación de alámbres</div></li>
+      		</ul>
+      	</li>
+      	<li id="7"><a href="">Abonos</a>
+      		<ul><li>
+      			<div class='fc-event'>Abonos Naturales de alta duración</div>
+      			<div class='fc-event'>Abonos Naturales de baja duración</div>
+      			<div class='fc-event'>Fertilizantes líquidos</div>
+      			<div class='fc-event'>Fertilizantes sólidos</div></li>
       		</ul>
       	</li>
   
