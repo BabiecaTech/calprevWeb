@@ -3,6 +3,7 @@ header('Content-Type: application/json');
 $con= new PDO("mysql:dbname=calendario;host=localhost","root","");
 
 $accion = (isset($_GET['accion']))?$_GET['accion']:'leer';
+$tempera = (isset($_GET['temp']))?$_GET['temp']:0;
 switch ($accion) {
 	case 'agregar':
 		# code...
@@ -73,7 +74,7 @@ switch ($accion) {
 			echo json_encode($respuesta);
 		break;
 
-		/*case 'actualizar':
+		case 'actualizar':
 			# code...
 			$sql = $con-> prepare("SELECT * FROM fincas WHERE id =1");
 			$sql->execute();
@@ -87,7 +88,7 @@ switch ($accion) {
 			//echo $coordenadas;
 			actualizarDb($coordenadas,$con);
 
-			break;*/
+			break;
 
 			/*case 'reglas':
 			# code...
@@ -105,7 +106,7 @@ switch ($accion) {
 			$mes = date('m' , strtotime($hoy));
 			//cargarTemperatura($mes,$con);
 			if ($mes < 5 || $mes == 8){
-			$ano = date('Y' , strtotime($hoy));
+				$ano = date('Y' , strtotime($hoy));
 
 			//$arreglo = $_POST['eve'];
 			//echo $arreglo;
@@ -113,10 +114,27 @@ switch ($accion) {
 			//$sql->execute();
 
 			//$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
-			$a = json_decode(file_get_contents($_POST['eve']));
-			cargarTemperatura($ano,$mes,$con,$a);
+			
+			//if ($tempera == 1){
+				//$sql=$con->prepare("SELECT * FROM events");
+				//$sql->execute();
+				//$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
+				//cargarTemperatura($ano,$mes,$con,$resultado);
+				cargarTemperatura($ano,$mes,$con);
+				//echo json_encode($resultado);
+			//}
 			}
 			break;
+
+		case 'humedad':
+		cargarHumedad($con);
+		break;
+
+		case 'viento':
+		$arreglo=[];
+		cargarViento($con,$arreglo);
+		echo json_encode($arreglo);
+		break;
 
 		case 'leer':
 		# code..
@@ -130,8 +148,9 @@ switch ($accion) {
 
 			echo json_encode($resultado);*/
 			cargarReglas($con,$resultado);
-			$temp = isset($_POST['eve']);
-			if ($temp){
+		
+			if ($tempera == 2){
+				//echo $tempera;
 				$hoy = date('Y-m-d');
 				$mes = date('m' , strtotime($hoy));
 				if ($mes < 5 || $mes == 8){
@@ -166,7 +185,7 @@ function cargarReglas($con, &$arreglo){
 	//echo json_encode($arreglo);
 }
 
-function cargarTemperatura($ano,$mes,$con, &$arreglo){
+function cargarTemperatura($ano,$mes,$con){
 	
 		$sql1=$con->prepare("SELECT * FROM prohoras where MONTH(Fecha)>=:MES and YEAR(Fecha)=:ANO");
 		$sql1->execute(array("MES"=>$mes,
@@ -194,12 +213,52 @@ function cargarTemperatura($ano,$mes,$con, &$arreglo){
 				$i++;
 			}
 		}
-		//echo json_encode($arreglo);
+		echo json_encode($arreglo);
 	}
+
+function cargarHumedad ($con){
+	$sql=$con->prepare("SELECT DISTINCT fecha FROM prohoras WHERE humedad < 30");
+	$sql->execute();
+	$respuesta = $sql->fetchAll(PDO::FETCH_ASSOC);
+	$cant_fila = count($respuesta);
+	$arreglo =[];
+	$i=0;
+	while ($i < $cant_fila) {
+		$dato = (object) ['start' => $respuesta[$i]['fecha'], 'overlap' => true, 'rendering' => 'background', 'color' => '#F9F262'];
+		$arreglo [] = $dato;
+		$i++;
+	}
+	$sql1=$con->prepare("SELECT DISTINCT fecha FROM prohoras WHERE humedad > 60");
+	$sql1->execute();
+	$respuesta = $sql1->fetchAll(PDO::FETCH_ASSOC);
+	$cant_fila = count($respuesta);
+	$i =0;
+	while ($i < $cant_fila) {
+		$dato = (object) ['start' => $respuesta[$i]['fecha'], 'overlap' => true, 'rendering' => 'background', 'color' => '#FC9138'];
+		$arreglo [] = $dato;
+		$i++;
+	}
+	cargarViento($con,$arreglo);
+	echo json_encode($arreglo);
+}
+
+function cargarViento ($con,&$arreglo){
+	//SELECT DISTINCT fecha,hora,viento FROM prohoras WHERE viento >10
+	$sql1=$con->prepare("SELECT DISTINCT fecha FROM prohoras WHERE viento >10");
+	$sql1->execute();
+	$respuesta = $sql1->fetchAll(PDO::FETCH_ASSOC);
+	$cant_fila = count($respuesta);
+	$i =0;
+	while ($i < $cant_fila) {
+		$dato = (object) ['start' => $respuesta[$i]['fecha'], 'overlap' => true, 'rendering' => 'background', 'color' => '#47FC38'];
+		$arreglo [] = $dato;
+		$i++;
+	}
+}
 
 function actualizarDb($coordenadas,$con){
 	$hoy = date('Y-m-d'); //obtiene fcha actual
-	for ($contador_dia = 0; $contador_dia < 60; $contador_dia++){
+	for ($contador_dia = 0; $contador_dia < 153; $contador_dia++){
 		$nuevafecha = strtotime ('+'.$contador_dia.' day' , strtotime($hoy));
 		$nuevafecha = date ( 'Y-m-d' , $nuevafecha );
 		//echo $nuevafecha;
@@ -244,6 +303,4 @@ function actualizarDb($coordenadas,$con){
 	echo json_encode($respuesta);
 
 }
-
-
 ?>
