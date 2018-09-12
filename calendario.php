@@ -1,12 +1,32 @@
+<!DOCTYPE html>
 <?php
-  include("conexion.php");
+  //include("conexion.php");
   //$result_events = "SELECT id, title, color, start, end FROM events";
   //$resultado = mysqli_query($conn, $result_events);
-  $result_login = "SELECT * FROM login";
-  $resultado = mysqli_query($conn, $result_login);
-  $resultado1 = mysqli_query($conn, $result_login);
+  //$result_login = "SELECT * FROM login";
+  //$resultado = mysqli_query($conn, $result_login);
+  //$resultado1 = mysqli_query($conn, $result_login);
+  function cargar_tareas (){
+  	require("conexion.php");
+  	$sql = "SELECT * FROM tareas ORDER BY nombre ASC";
+  	$respusta = mysqli_query($conn, $sql);
+  	while($fila = mysqli_fetch_assoc($respusta)){?>
+        <option value=<?php echo utf8_encode($fila['nombre']) ?>><?php echo utf8_encode($fila['nombre']) ?></option>
+        <?php
+    }
+
+  }
+  function cargar_usuarios (){
+  	require("conexion.php");
+  	$sql = "SELECT * FROM login ORDER BY user ASC";
+  	$respusta = mysqli_query($conn, $sql);
+  	while($fila = mysqli_fetch_assoc($respusta)){?>
+        <option value=<?php echo utf8_encode($fila['user']) ?>><?php echo utf8_encode($fila['user']) ?></option>
+        <?php
+    }
+  }
 ?>
-<!DOCTYPE html>
+
 <?php
   session_start();
   if (@!$_SESSION['user']) {
@@ -33,7 +53,7 @@
 <script>
 
    $(document).ready(function() {
-   		var t =0;
+   		//var t =0;
 
    	$('.menu2 li:has(ul)').click(function(e){
    		e.preventDefault();
@@ -52,7 +72,7 @@
    			
    			$(this).children('ul').slideDown();
    			if ($(this).attr('id') ==2){
-   				t=2;
+   				//t=2;
    				actualizarRegla('cargar');
    				}
    			if ($(this).attr('id') ==3){
@@ -86,7 +106,7 @@
       header: {
         left: 'prev,next today',
         center: 'title',
-        right: 'month,agendaWeek,agendaDay'
+        right: 'month,agendaWeek'
       },
       
       defaultDate: new Date(),
@@ -129,10 +149,11 @@
       	if (fechaHora >= moment[0]){
         $('#txtFechaA').val(date.format());
         $('#txtDescA').val("");
-        $('#txtTituloA').val("");
-        $('#txtHoraA').val("06:00");
+        $('#txtTituloA').val("tareaSelect");
+        $('#txtHoraA').val("05:00");
+        $('#txtHoraAfin').val("06:00");
         $('#numCostoA').val("0");
-        $('asignadaA').val("");
+        $('#asignadaA').val("userSelect");
         $('#agregarModal').modal();
     }else{
         	alert("Fecha no permitida para asignar la tarea");
@@ -144,6 +165,7 @@
       eventClick:function(calEvent,jsEvent,view){
       	var moment = $('#calendar').fullCalendar('getDate').format().split("T");
       	var fechaHora = calEvent.start.format().split("T");
+      	var fechaHoraFin = calEvent.end.format().split("T");
       	if (fechaHora[0] >= moment[0]){
         $('#tituloEvento').html(calEvent.title);
         $('#txtDesc').val(calEvent.descripcion);
@@ -154,6 +176,7 @@
 
         $('#txtFecha').val(fechaHora[0]);
         $('#txtHora').val(fechaHora[1]);
+        $('#txtHoraFin').val(fechaHoraFin[1]);
 
         $('#vistaModal').modal();
     	}else{
@@ -166,6 +189,8 @@
 
       	var moment = $('#calendar').fullCalendar('getDate').format().split("T");
       	var fechaHora = calEvent.start.format().split("T");
+      	var fechaHoraFin = calEvent.end.format().split("T");
+
       	if (fechaHora[0] >= moment[0]){
   			
         	$('#txtId').val(calEvent.id);
@@ -176,6 +201,7 @@
         
         	$('#txtFecha').val(fechaHora[0]);
         	$('#txtHora').val(fechaHora[1]);
+        	$('#txtHoraFin').val(fechaHoraFin[1]);
 
         recolectarDatosM();
         enviarDatos('modificar',tarea,true);
@@ -186,7 +212,21 @@
 
       },
       eventResize: function/*(event, delta, revertFunc)*/(calEvent) {
-        alert(calEvent.end.format());
+        //alert(calEvent.end.format());
+        var fechaHora = calEvent.start.format().split("T");
+        var fechaHoraFin = calEvent.end.format().split("T");
+        $('#txtId').val(calEvent.id);
+        $('#txtTitulo').val(calEvent.title);
+        $('#txtDesc').val(calEvent.descripcion);
+        $('#numCosto').val(calEvent.costo);
+        $('#asignada').val(calEvent.asignar);
+        
+        $('#txtFecha').val(fechaHora[0]);
+        $('#txtHora').val(fechaHora[1]);
+        $('#txtHoraFin').val(fechaHoraFin[1]);
+
+        recolectarDatosM();
+        enviarDatos('modificar',tarea,true);
     //alert(event.title + " end is now " + event.end.format());
 
     /*if (confirm("desea relizar la modificacion?")) {
@@ -316,29 +356,28 @@ eventMouseout: function(event, jsEvent, view) {
         </button>
       </div>
       <div class="modal-body">
-        
-        <input type="text" id="txtId" name="txtId" /><br/>
-        Fecha: <input type="date" id="txtFecha" name="txtFecha" /><br/>
-        Tarea: <select id = "txtTitulo" name ="txtTitulo">
-              <option value="seleccione">Seleccione</option>
-              <option value="Arar">Arar</option>
+        <form>
+        	<div class="form-group">
+        <input type="hidden" id="txtId" name="txtId" />
+        Fecha: <input type="date" id="txtFecha" name="txtFecha" class="form-control" required/>
+        Tarea: <select id = "txtTitulo" name ="txtTitulo" class="form-control" required>
+              <!--<option value="Arar" selected >Arar</option>
               <option value="Poda">Poda</option>
               <option value="Curacion">Curacion</option>
               <option value="Riego">Riego</option>
-              <option value="Riego">Desorrillar</option>
-              <option value="Riego">Desbrote</option>              
-          </select><!--<input type="text" id="txtTitulo" name="txtTitulo" />--><br/>
-        Hora: <input type="time" id="txtHora" name="txtHora" value="06:00" /><br/>
-        Descripcion: <textarea id="txtDesc" rows="3"> </textarea><br/>
-        Costo $: <input type="number" id="numCosto" name="numCosto" value="0"><br/>
-        Asignar a: <select id = "asignada" name ="asignada">
-          <?php 
-            while($fila = mysqli_fetch_assoc($resultado)){?>
-              <option value=<?php echo $fila['user'] ?>><?php echo $fila['user'] ?></option>
-            <?php
-            }
-            ?>
-            </select><br/>
+              <option value="Desorrillar">Desorrillar</option>
+              <option value="Desbrote">Desbrote</option> -->
+              <?php cargar_tareas();?>             
+          </select><!--<input type="text" id="txtTitulo" name="txtTitulo" />-->
+        Hora Inicio: <input type="time" id="txtHora" name="txtHora" class="form-control" min="5:00" max="20:00" required/>
+        Hora Finalizacion: <input type="time" id="txtHoraFin" name="txtHoraFin" class="form-control" min="6:00" max="21:00" required/>
+        Descripcion: <textarea id="txtDesc" rows="3" placeholder="Escriba una descripcion de la tarea" class="form-control"> </textarea>
+        Costo $: <input type="number" id="numCosto" name="numCosto" value="0" class="form-control">
+        Asignar a: <select id = "asignada" name ="asignada" class="form-control" required>
+          		<?php cargar_usuarios();?>
+            </select>
+        </div>
+        </form>
       </div>
       <div class="modal-footer">
         
@@ -363,28 +402,25 @@ eventMouseout: function(event, jsEvent, view) {
       </div>
       <div class="modal-body">
         <!--<div id="descripcionEvento"></div>-->
-        <input type="text" id="txtIdA" name="txtId" /><br/>
-        Fecha: <input type="date" id="txtFechaA" name="txtFecha" /><br/>
-        Tarea: <select id = "txtTituloA" name ="txtTituloA">
-              <option value="Arar">Arar</option>
-              <option value="Poda">Poda</option>
-              <option value="Curacion">Curacion</option>
-              <option value="Riego">Riego</option>
-              <option value="Riego">Desorrillar</option>
-              <option value="Riego">Desbrote</option>
-            </select><br/>
-        Hora: <input type="time" id="txtHoraA" name="txtHoraA" value="06:00" /><br/>
-        Descripcion: <textarea id="txtDescA" rows="3"> </textarea><br/>
-        Costo $: <input type="number" id="numCostoA" name="numCostoA" value="0"><br/>
-        Asignar a: <select id = "asignadaA" name ="asignadaA">
-          <?php 
-            while($fila = mysqli_fetch_assoc($resultado1)){?>
-              <option value=<?php echo $fila['user'] ?>><?php echo $fila['user'] ?></option>
-            <?php
-            }
-            ?>
-            </select><br/>
+        <form>
+        	<div class="form-group">
+        <input type="hidden" id="txtIdA" name="txtId"/>
+        Fecha: <input type="date" id="txtFechaA" name="txtFecha" class="form-control" required/>
+        Tarea: <select id = "txtTituloA" name ="txtTituloA" class="form-control" required>
+        		<option value="tareaSelect">Seleccione Tarea</option>
+              <?php cargar_tareas();?>
+            </select>
+        Hora Inicio: <input type="time" id="txtHoraA" name="txtHoraA" class="form-control" min="5:00" max="20:00" required/>
+        Hora Finalizacion: <input type="time" id="txtHoraAfin" name="txtHoraAfin" class="form-control"min="6:00" max="21:00" required/>
+        Descripcion: <textarea id="txtDescA" rows="3" placeholder="Escriba una descripcion de la tarea" class="form-control"> </textarea>
+        Costo $: <input type="number" id="numCostoA" name="numCostoA" value="0" class="form-control">
+        Asignar a: <select id = "asignadaA" name ="asignadaA" class="form-control" required>
+        			<option value="userSelect">Seleccione Usuario</option>
+          			<?php cargar_usuarios();?>
+            	</select>
         <input type="hidden" id="idUser" name="idUser" value=<?php echo $_SESSION['id'] ?> />
+        </div>
+        </form>
       </div>
       <div class="modal-footer">
         <button type="button" id="btnAgregar" class="btn btn-success">Agregar</button>
@@ -397,10 +433,19 @@ eventMouseout: function(event, jsEvent, view) {
 <script type="text/javascript">
   var nuevo, tarea, datos, id_finca;
   $('#btnAgregar').click(function(){
+  	if ($('#txtTituloA').val() == "tareaSelect"){
+  		alert ("Debe seleccionar una tarea");
+  		$('#txtTituloA').focus();
+  	}else if ($('#asignadaA').val() == "userSelect") {
+  		alert ("Debe asignar la tarea a un usuario");
+  		$('#asignadaA').focus();
+
+  	}else{
     recolectarDatos();
     /*$('#calendar').fullCalendar('renderEvent',nuevo);
     $('#agregarModal').modal('toggle');*/
     enviarDatos('agregar',nuevo);
+}
 
   });
 
@@ -435,6 +480,7 @@ eventMouseout: function(event, jsEvent, view) {
   }
 
   function recolectarDatos(){
+  	
     nuevo = {
       id:$('#txtIdA').val(),
       title:$('#txtTituloA').val(),
@@ -442,7 +488,7 @@ eventMouseout: function(event, jsEvent, view) {
       costo:$('#numCostoA').val(),
       asignar:$('#asignadaA').val(),
       start:$('#txtFechaA').val()+" "+$('#txtHoraA').val(),
-      end:$('#txtFechaA').val()+" "+$('#txtHoraA').val(),
+      end:$('#txtFechaA').val()+" "+$('#txtHoraAfin').val(),
       asignar:$('#asignadaA').val(),
       id_user:<?php echo $_SESSION['id'] ?>
   };
@@ -455,7 +501,7 @@ function recolectarDatosM(){
       descripcion:$('#txtDesc').val(),
       costo:$('#numCosto').val(),
       start:$('#txtFecha').val()+" "+$('#txtHora').val(),
-      end:$('#txtFecha').val()+" "+$('#txtHora').val(),
+      end:$('#txtFecha').val()+" "+$('#txtHoraFin').val(),
       asignar:$('#asignada').val(),
       id_user:<?php echo $_SESSION['id'] ?>
   };
@@ -523,14 +569,14 @@ include("menu.php");
       <ul class="menu2">
       	<li id="1"><a href="">Tareas sobre la planta</a>
       		<ul>
-      			<li><div class='fc-event'>Desbrotar</div>
-      			<div class='fc-event'>Despegar Malla Antigranizo</div>
-      			<div class='fc-event'>Despuntar</div>
-      			<div class='fc-event'>Levantar Malla para Cosecha</div>
-      			<div class='fc-event'>Poda</div>
-      			<div class='fc-event'>Atada</div>
-      			<div class='fc-event'>Armado de Barbechos</div>
-      			<div class='fc-event'>Injertos</div></li>
+      			<li><div class='fc-event'>Desbrotar</div></li>
+      			<li><div class='fc-event'>Despegar Malla Antigranizo</div></li>
+      			<li><div class='fc-event'>Despuntar</div></li>
+      			<li><div class='fc-event'>Levantar Malla para Cosecha</div></li>
+      			<li><div class='fc-event'>Poda</div></li>
+      			<li><div class='fc-event'>Atada</div></li>
+      			<li><div class='fc-event'>Armado de Barbechos</div></li>
+      			<li><div class='fc-event'>Injertos</div></li>
 
       		</ul>
 
@@ -584,9 +630,8 @@ include("menu.php");
     </div>
 
     <div id='calendar'></div>
-    <div style='clear:both'></div>
-   <!--<button type="button" id="btnActualizar" class="btn btn-success">Actualizar DB</button>-->
-    <button type="button" id="btnCargar" class="btn btn-primary">Cargar datos</button>
+   <!--<button type="button" id="btnActualizar" class="btn btn-success">Actualizar DB</button>
+    <button type="button" id="btnCargar" class="btn btn-primary">Cargar datos</button>-->
   </div>
 </body>
 </html>
