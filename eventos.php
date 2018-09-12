@@ -104,7 +104,9 @@ switch ($accion) {
 			# code..
 			$hoy = date('Y-m-d');
 			$mes = date('m' , strtotime($hoy));
+			$arreglo =[];
 			//cargarTemperatura($mes,$con);
+			//echo $mes;
 			if ($mes < 5 || $mes == 8){
 				$ano = date('Y' , strtotime($hoy));
 
@@ -120,10 +122,11 @@ switch ($accion) {
 				//$sql->execute();
 				//$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
 				//cargarTemperatura($ano,$mes,$con,$resultado);
-				cargarTemperatura($ano,$mes,$con);
+				cargarTemperatura($ano,$mes,$con,$arreglo);
 				//echo json_encode($resultado);
 			//}
 			}
+			echo json_encode($arreglo);
 			break;
 
 		case 'humedad':
@@ -185,7 +188,7 @@ function cargarReglas($con, &$arreglo){
 	//echo json_encode($arreglo);
 }
 
-function cargarTemperatura($ano,$mes,$con){
+function cargarTemperatura($ano,$mes,$con,&$arreglo){
 	
 		$sql1=$con->prepare("SELECT * FROM prohoras where MONTH(Fecha)>=:MES and YEAR(Fecha)=:ANO");
 		$sql1->execute(array("MES"=>$mes,
@@ -213,7 +216,7 @@ function cargarTemperatura($ano,$mes,$con){
 				$i++;
 			}
 		}
-		echo json_encode($arreglo);
+		//echo json_encode($arreglo);
 	}
 
 function cargarHumedad ($con){
