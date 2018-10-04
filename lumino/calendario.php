@@ -11,7 +11,7 @@
   	$sql = "SELECT * FROM tareas ORDER BY nombre ASC";
   	$respusta = mysqli_query($conn, $sql);
   	while($fila = mysqli_fetch_assoc($respusta)){?>
-        <option value=<?php echo utf8_encode($fila['nombre']) ?>><?php echo utf8_encode($fila['nombre']) ?></option>
+        <option value="<?php echo utf8_encode($fila['nombre']) ?>"><?php echo utf8_encode($fila['nombre']) ?></option>
         <?php
     }
 
@@ -21,7 +21,7 @@
   	$sql = "SELECT * FROM login ORDER BY user ASC";
   	$respusta = mysqli_query($conn, $sql);
   	while($fila = mysqli_fetch_assoc($respusta)){?>
-        <option value=<?php echo utf8_encode($fila['user']) ?>><?php echo utf8_encode($fila['user']) ?></option>
+        <option value="<?php echo utf8_encode($fila['user']) ?>"><?php echo utf8_encode($fila['user']) ?></option>
         <?php
     }
   }
@@ -39,17 +39,18 @@
 <html>
 <head>
 <meta charset='utf-8' />
-<link href='css/estilo.css' rel='stylesheet' />
+<!--<link href='css/estilo.css' rel='stylesheet' />-->
 <link href='css/calendar.min.css' rel='stylesheet' />
 <link href='css/calendar.print.min.css' rel='stylesheet' media='print' />
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+<!--<link href="css/bootstrap.min.css" rel="stylesheet">-->
+<link rel="stylesheet" href="css/bootstrap.min.css">
 <script src='js/moment.min.js'></script>
 <script src='js/jquery.min.js'></script>
 <script src='js/fullcalendar.min.js'></script>
 <script src='idioma/es-us.js'></script>
 <script src='js/jquery-ui.min.js'></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
 <script>
 
    $(document).ready(function() {
@@ -118,14 +119,16 @@
       drop: function(date, jsEvent , ui , resourceId ) {
       	var moment = $('#calendar').fullCalendar('getDate').format().split("T");
       	var fechaHora = date.format();
+      	//alert($.trim($(this).text()));
       	if (fechaHora >= moment[0]){
        var t = {title:$.trim($(this).text()),
                 descripcion:'',
                 costo:0,
-                start:date.format(),
-                end:date.format(),
-                asignar:<?php echo $_SESSION['id'] ?>,
-                id_user:<?php echo $_SESSION['id'] ?>
+                start:fechaHora+" "+"05:00:00",
+                end:fechaHora+" "+"06:00:00",
+                editable:1,
+                asignar:<?php echo $_SESSION['id']; ?>,
+                id_user:<?php echo $_SESSION['id']; ?>
               }
       enviarDatos('agregard',t,true);
   }else{
@@ -139,7 +142,7 @@
     	//'http://localhost:8080/Ingenieria/caleprevWeb/eventos.php'
       //events: a,
       eventSources:[{
-      	url:'http://localhost:8080/Ingenieria/caleprevWeb/eventos.php?accion=leer',
+      	url:'http://localhost:8080/Ingenieria/caleprevWeb/lumino/eventos.php?accion=leer',
       	id:'inicio'}],
 
       dayClick:function(date,jsEvent,view){
@@ -273,33 +276,54 @@ eventMouseout: function(event, jsEvent, view) {
   }
 
   #external-events {
-  	float: left;
-    width: 20%;
-  }
-
-  #external-events .menu2 {
-    margin-top: 10px;
-    margin-left: 10px;
-    padding: 5px;
-    border: 1px solid #ccc;
+    float: left;
+    width: auto;
+    padding: 0 10px;
+    border: 3px solid #ccc;
     background: #eee;
+    text-align: left;
   }
 
   #external-events h4 {
     font-size: 16px;
     margin-top: 0;
     padding-top: 1em;
+    color: #404040;
   }
 
   #external-events .fc-event {
-    margin: 5px 0;
+    margin: 10px 0;
+    padding: 5px;
     cursor: pointer;
   }
 
+  #tarea1{
+    background: #008000;
+  } 
+
+  #tarea2{
+    background: #b37700;
+  } 
+
+  #tarea3{
+    background: #ff6600;
+  } 
+
+  #tarea4{
+    background: #6600cc;
+  } 
+
+  #tarea5{
+    background: #ff0000;
+  } 
+
+  #tarea6{
+    background: #0066ff;
+  } 
   #external-events p {
     margin: 1.5em 0;
-    font-size: 11px;
-    color: #666;
+    font-size: 14px;
+    color: #262626;
   }
 
   #external-events p input {
@@ -314,8 +338,7 @@ eventMouseout: function(event, jsEvent, view) {
   }
 
   .menu2 {
-  	width: 20%;
-  	min-width: 300px;
+  	width: 100%;
   	display: inline-block;
   }
   ul {
@@ -480,7 +503,6 @@ eventMouseout: function(event, jsEvent, view) {
   }
 
   function recolectarDatos(){
-  	
     nuevo = {
       id:$('#txtIdA').val(),
       title:$('#txtTituloA').val(),
@@ -524,6 +546,7 @@ function actualizarRegla(accion){
 }
 
 function enviarDatos(accion,objEvento,modal){
+
   $.ajax({
       type:'POST',
       url:'eventos.php?accion='+accion,
@@ -559,79 +582,57 @@ function enviarDatos(accion,objEvento,modal){
 </script>
 <body>
   <?php
-include("menu.php");
+include("plantilla.php");
 ?>
 
-  <div id='wrap'>
+<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
+    <div class="row">
+      <ol class="breadcrumb">
+        <li><a href="#">
+          <em class="fa fa-home"></em>
+        </a></li>
+        <li class="active">Calendario</li>
+      </ol>
+    </div><!--/.row-->
+    
+    <div class="row">
+      <div class="col-lg-12">
+        <h1 class="page-header">Calendario</h1>
+      </div>
+    </div><!--/.row-->
 
+    <div class="row">
+      <div class="col-lg-3">
+        <div class="panel panel-default">
+          <div id='wrap'>
     <div id='external-events'>
-     
+      <h4>Lista de Tareas</h4>
       <ul class="menu2">
-      	<li id="1"><a href="">Tareas sobre la planta</a>
-      		<ul>
-      			<li><div class='fc-event'>Desbrotar</div></li>
-      			<li><div class='fc-event'>Despegar Malla Antigranizo</div></li>
-      			<li><div class='fc-event'>Despuntar</div></li>
-      			<li><div class='fc-event'>Levantar Malla para Cosecha</div></li>
-      			<li><div class='fc-event'>Poda</div></li>
-      			<li><div class='fc-event'>Atada</div></li>
-      			<li><div class='fc-event'>Armado de Barbechos</div></li>
-      			<li><div class='fc-event'>Injertos</div></li>
+        
+            <li id="1"><div class='fc-event' id="tarea1">Trabajos en Plantas</div></li>
+            <li id="2"><div class='fc-event' id="tarea2">Movimiento de Tierra</div></li>
+            <li id="3"><div class='fc-event' id="tarea3">Prevencion (Sanidad)</div></li>
+            <li id="4"><div class='fc-event' id="tarea4">Apliques y abonos</div></li>
+            <li id="5"><div class='fc-event' id="tarea5">Vendimia</div></li>
+            <li id="6"><div class='fc-event' id="tarea6">Mantenimiento</div></li>
 
-      		</ul>
-
-      	</li>
-      	<li id="2"><a href="">Tareas de movimiento de tierra</a>
-      		<ul>
-      			<li><div class='fc-event'>Desorillar</div>
-      			<div class='fc-event'>Rastrear</div>
-      			<div class='fc-event'>Tapar</div>
-      			<div class='fc-event'>Replantar y hacer Mugrones</div></li>
-      		</ul>
-
-      	</li>
-      	<li id="3"><a href="">Tareas de Sanidad</a>
-      		<ul>
-      			<li><div class='fc-event'>Curación Azufre (prevencion Quintal)</div>
-      			<div class='fc-event'>Herbicidas</div>
-      			<div class='fc-event'>Curación a base de sulfato (prevención de Poronospera)</div>
-      			<div class='fc-event'>Curación preventiva para Polilla de la Vid</div></li>
-      		</ul>
-      	</li>
-      	<li id="4"><a href="">Tareas de Riego</a>
-      		<ul><li>
-      			<div class='fc-event'>Riego</div>
-      			<div class='fc-event'>Acentar</div></li>
-      		</ul>
-      	</li>
-      	<li id="5"><a href="">Vendimia</a>
-      		<ul><li>
-      			<div class='fc-event'>Cosecha</div></li>
-      		</ul>
-      	</li>
-      	<li id="6"><a href="">Mantenimiento</a>
-      		<ul><li>
-      			<div class='fc-event'>Canales y Acequias</div>
-      			<div class='fc-event'>Cambio maderas</div>
-      			<div class='fc-event'>Tensado y Colocación de alámbres</div></li>
-      		</ul>
-      	</li>
-      	<li id="7"><a href="">Abonos</a>
-      		<ul><li>
-      			<div class='fc-event'>Abonos Naturales de alta duración</div>
-      			<div class='fc-event'>Abonos Naturales de baja duración</div>
-      			<div class='fc-event'>Fertilizantes líquidos</div>
-      			<div class='fc-event'>Fertilizantes sólidos</div></li>
-      		</ul>
-      	</li>
-  
-      </ul>
+          </ul>
     
     </div>
 
-    <div id='calendar'></div>
-   <!--<button type="button" id="btnActualizar" class="btn btn-success">Actualizar DB</button>
-    <button type="button" id="btnCargar" class="btn btn-primary">Cargar datos</button>-->
   </div>
+</div>
+    </div>
+      <div class="col-lg-9">
+        <div class="panel panel-default">
+          <div class="panel-body">
+         <div id='calendar'></div>
+       </div>
+      </div>
+    </div>
+    </div><!--/.row-->
+
+  </div>
+
 </body>
 </html>

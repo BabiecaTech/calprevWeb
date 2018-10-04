@@ -7,13 +7,14 @@ $tempera = (isset($_GET['temp']))?$_GET['temp']:0;
 switch ($accion) {
 	case 'agregar':
 		# code...
+			$color = obtenerColor($con, $_POST['title']);
 			$sql=$con->prepare("INSERT INTO events(title,descripcion,costo,color,start,end,asignar,id_user) VALUES (:title,:descripcion,:costo,:color,:start,:end,:asignar,:id_user)");
 
 			$respuesta=$sql->execute(array(
 				'title' =>$_POST['title'],
 				'descripcion' =>$_POST['descripcion'],
 				'costo' =>$_POST['costo'],
-				'color' =>'#167EAF',
+				'color' =>$color,
 				'start' =>$_POST['start'],
 				'end' =>$_POST['end'],
 				'asignar' =>$_POST['asignar'],
@@ -24,13 +25,14 @@ switch ($accion) {
 
 	case 'agregard':
 		# code...
+			$color = obtenerColor($con, $_POST['title']);
 			$sql=$con->prepare("INSERT INTO events(title,descripcion,costo,color,start,end,asignar,id_user) VALUES (:title,:descripcion,:costo,:color,:start,:end,:asignar,:id_user)");
 
 			$respuesta=$sql->execute(array(
 				'title' =>$_POST['title'],
 				'descripcion' =>$_POST['descripcion'],
 				'costo' =>$_POST['costo'],
-				'color' =>'#167EAF',
+				'color' =>$color,
 				'start' =>$_POST['start'],
 				'end' =>$_POST['end'],
 				'asignar'=>$_POST['asignar'],
@@ -50,6 +52,7 @@ switch ($accion) {
 		break;
 	case 'modificar':
 		# code...
+			$color = obtenerColor($con, $_POST['title']);
 			$sql=$con->prepare("UPDATE events SET 
 				title=:title, 
 				descripcion=:descripcion,
@@ -65,7 +68,7 @@ switch ($accion) {
 				'title' =>$_POST['title'],
 				'descripcion' =>$_POST['descripcion'],
 				'costo' =>$_POST['costo'],
-				'color' =>'#167EAF',
+				'color' =>$color,
 				'start' =>$_POST['start'],
 				'end' =>$_POST['end'],
 				'asignar' =>$_POST['asignar'],
@@ -167,6 +170,13 @@ switch ($accion) {
 		break;
 }
 
+function obtenerColor($con, $id){
+	//echo ($id);
+	$sql=$con->prepare("SELECT color FROM tareas WHERE nombre = '".$id."'");
+	$sql->execute();
+	$respuesta = $sql->fetchAll(PDO::FETCH_ASSOC);
+	return $respuesta[0]['color'];
+}
 function cargarReglas($con, &$arreglo){
 	$sql=$con->prepare("SELECT * FROM prohoras");
 	$sql->execute();
@@ -206,7 +216,8 @@ function cargarTemperatura($ano,$mes,$con,&$arreglo){
 					# code...
 					$fecha = strtotime ('+'.$j.' day' , strtotime( $respuesta[$i]['fecha']));
 					//echo date('Y-m-d',$fecha);
-					$dato = (object) ['start' => date('Y-m-d',$fecha), 'overlap' => true, 'rendering' => 'background', 'color' => '#A0CEEF'];
+					$dato = (object) ['start' => date('Y-m-d',$fecha), 'overlap' => true, 'rendering' => 'background', 'color' => '#A0CEEF']; 
+					//color celeste regla tmperatura menor a 3 grados
 					$arreglo [] = $dato;
 					$j++;
 				}
