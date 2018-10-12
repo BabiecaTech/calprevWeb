@@ -60,6 +60,8 @@
    $(document).ready(function() {
    		//var t =0;
 
+    $('.nav.menu li').eq(1).addClass('active');
+
    	$('.menu2 li:has(a)').click(function(e){
    		e.preventDefault();
 
@@ -267,12 +269,8 @@
 eventMouseout: function(event, jsEvent, view) {
     //$('#'+event.id).remove();
 }
-
-
-    });
-
-  });
-
+});
+});
 </script>
 
 <style>
@@ -373,7 +371,7 @@ eventMouseout: function(event, jsEvent, view) {
   	display: none;
   }
 
-  .menu2 .seleccion > a{
+  .menu2 .seleccion .fc-event > a{
   	background: #404040;
   	color: #fff;
   }
