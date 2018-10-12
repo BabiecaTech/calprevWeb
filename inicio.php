@@ -1,4 +1,11 @@
 <!DOCTYPE html>
+<?php
+  session_start();
+  if (@!$_SESSION['user']) {
+
+    header("Location:index.php");
+  }
+?>
 <html>
 <head>
 	<meta charset="utf-8">
@@ -8,6 +15,8 @@
 	<link href="css/font-awesome.min.css" rel="stylesheet">
 	<link href="css/datepicker3.css" rel="stylesheet">
 	<link href="css/styles.css" rel="stylesheet">
+	<link href='css/calendar.min.css' rel='stylesheet' />
+	<link href='css/calendar.print.min.css' rel='stylesheet' media='print' />
 	
 	<!--Custom Font-->
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
@@ -15,9 +24,14 @@
 	<script src="js/html5shiv.js"></script>
 	<script src="js/respond.min.js"></script>
 	<![endif]-->
+
 </head>
 <body>
-	<nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
+  	<?php
+	include("plantilla.php");
+	?>
+
+	<!--<nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
 		<div class="container-fluid">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#sidebar-collapse"><span class="sr-only">Toggle navigation</span>
@@ -25,7 +39,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span></button>
 				<a class="navbar-brand" href="#"><span>Calendario</span></a>
-				<!--<ul class="nav navbar-top-links navbar-right">
+				<ul class="nav navbar-top-links navbar-right">
 					<li class="dropdown"><a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
 						<em class="fa fa-envelope"></em><span class="label label-danger">15</span>
 					</a>
@@ -77,10 +91,10 @@
 							</a></li>
 						</ul>
 					</li>
-				</ul>-->
+				</ul>
 			</div>
-		</div><!-- /.container-fluid -->
-	</nav>
+		</div>--><!-- /.container-fluid -->
+	<!--</nav>
 	<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
 		<div class="profile-sidebar">
 			<div class="profile-userpic">
@@ -93,16 +107,17 @@
 			<div class="clear"></div>
 		</div>
 		<div class="divider"></div>
-		<!--<form role="search">
+		<form role="search">
 			<div class="form-group">
 				<input type="text" class="form-control" placeholder="Search">
 			</div>
-		</form>-->
+		</form>
 		<ul class="nav menu">
-			<li class="active"><a href="index.php"><em class="fa fa-dashboard">&nbsp;</em> Inicio</a></li>
+			<li class="active"><a href="index.php"><em class="fa fa-dashboard">&nbsp;</em> Inicio</a></li>-->
 			<!-- widgets.html -->
-			<li><a href="calendar.php"><em class="fa fa-calendar">&nbsp;</em> Calendar</a></li>
-			<!--<li><a href="charts.html"><em class="fa fa-bar-chart">&nbsp;</em> Charts</a></li>
+			<!--<li><a href="calendar.php"><em class="fa fa-calendar">&nbsp;</em> Calendar</a></li>
+			<li><a href="fincas.php"><em class="fa fa-calendar">&nbsp;</em> Finca</a></li>
+			<li><a href="charts.html"><em class="fa fa-bar-chart">&nbsp;</em> Charts</a></li>
 			<li><a href="charts.html"><em class="fa fa-bar-chart">&nbsp;</em> Charts</a></li>
 			<li><a href="elements.html"><em class="fa fa-toggle-off">&nbsp;</em> UI Elements</a></li>
 			<li><a href="panels.html"><em class="fa fa-clone">&nbsp;</em> Alerts &amp; Panels</a></li>
@@ -120,10 +135,10 @@
 						<span class="fa fa-arrow-right">&nbsp;</span> Sub Item 3
 					</a></li>
 				</ul>
-			</li>-->
+			</li>
 			<li><a href="index.php"><em class="fa fa-power-off">&nbsp;</em> Salir</a></li>
 		</ul>
-	</div><!--/.sidebar-->
+	</div>--><!--/.sidebar-->
 		
 	<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
 		<div class="row">
@@ -685,15 +700,46 @@
 		</div><!--/.row-->
 	</div>	<!--/.main-->
 	  
-
-<script src="js/jquery-1.11.1.min.js"></script>
+	<!--<script src="js/jquery-1.11.1.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/chart.min.js"></script>
 	<script src="js/chart-data.js"></script>
 	<script src="js/easypiechart.js"></script>
 	<script src="js/easypiechart-data.js"></script>
 	<script src="js/bootstrap-datepicker.js"></script>
-	<script src="js/custom.js"></script>
+	<script src="js/custom.js"></script>-->
+	
+	<script src='js/moment.min.js'></script>
+	<script src='js/jquery.min.js'></script>
+	<script src='js/fullcalendar.min.js'></script>
+	<script src='idioma/es-us.js'></script>
+	<script src='js/jquery-ui.min.js'></script>
+	<!--<script src="js/custom.js"></script>-->
+	<script>
+
+  $(document).ready(function() {
+
+  	$('.nav.menu li').eq(0).addClass('active');
+
+    $('#calendar').fullCalendar({
+      header: {
+        //left: 'prev,next today',
+        //center: 'title',
+        //right: 'month,agendaWeek,agendaDay,listMonth'
+      },
+      defaultDate: new Date(),
+      navLinks: false, // can click day/week names to navigate views
+      businessHours: false, // display business hours
+      eventSources:[{
+      	url:'http://localhost:8080/Ingenieria/caleprevWeb/eventos.php?accion=leer',
+      	id:'inicio'}],
+      editable: false,
+      droppable: false
+    });
+
+  });
+
+</script>
 	
 </body>
 </html>
