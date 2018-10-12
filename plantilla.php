@@ -4,7 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Calendario</title>
-  <link href="css/bootstrap.min1.css" rel="stylesheet">
+  <!--<link href="css/bootstrap.min1.css" rel="stylesheet">-->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link href="css/font-awesome.min.css" rel="stylesheet">
   <link href="css/datepicker3.css" rel="stylesheet">
   <link href="css/styles.css" rel="stylesheet">
@@ -34,7 +35,7 @@
         <img src="http://placehold.it/50/30a5ff/fff" class="img-responsive" alt="">
       </div>
       <div class="profile-usertitle">
-        <div class="profile-usertitle-name">Usuario</div>
+        <div class="profile-usertitle-name"><?php echo $_SESSION['user'];?></div>
         <div class="profile-usertitle-status"><span class="indicator label-success"></span>conectado</div>
       </div>
       <div class="clear"></div>
@@ -46,9 +47,10 @@
       </div>
     </form>-->
     <ul class="nav menu">
-      <li><a href="index.php"><em class="fa fa-dashboard">&nbsp;</em> Inicio</a></li>
+      <li><a href="inicio.php"><em class="fa fa-dashboard">&nbsp;</em> Inicio</a></li>
       <!-- widgets.html -->
-      <li class="active"><a href="calendario.php"><em class="fa fa-calendar">&nbsp;</em> Calendar</a></li>
+      <li><a href="calendar.php"><em class="fa fa-calendar">&nbsp;</em> Calendar</a></li>
+      <li><a href="fincas.php"><em class="fa fa-clone">&nbsp;</em> Finca</a></li>
       
       <li><a href="index.php"><em class="fa fa-power-off">&nbsp;</em> Salir</a></li>
     </ul>
