@@ -26,13 +26,13 @@
 							<div class="form-group">
 								<input class="form-control" placeholder="Password" name="pass" type="password" value="" required>
 							</div>
-							<div class="checkbox">
+							<!--<div class="checkbox">
 								<label>
 									<input name="remember" type="checkbox" value="Remember Me">Remember Me
 								</label>
-							</div>
+							</div>-->
 							<!--<a href="index.html" class="btn btn-primary">Login</a>-->
-							<input class="btn btn-primary" type="submit" value="Aceptar">
+							<input class="btn btn-primary" type="submit" value="INGRESAR">
 						</fieldset>
 					</form>
 				</div>
