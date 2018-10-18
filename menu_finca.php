@@ -41,11 +41,15 @@
       <div class="clear"></div>
     </div>
     <div class="divider"></div>
-    <!--<form role="search">
-      <div class="form-group">
-        <input type="text" class="form-control" placeholder="Search">
-      </div>
-    </form>-->
+   <form class="form-inline" method="post">
+    <div class="form-group mx-auto my-5">
+      <label class="sr-only" for="lacation"></label>
+      <input type="text" class="form-control" id="location" name="location" placeholder="ingrese ubicacion"> <br>
+      <button class="btn btn-primary" type="button" onclick="buscar()">Buscar</button><br>
+      <button style="margin-left:10px " class="btn btn-secondary" type="button" onclick="actual()">Localizacion Actual</button>
+    </div>
+    
+  </form>
     <ul class="nav menu">
       <li><a href="inicio.php"><em class="fa fa-dashboard">&nbsp;</em> Inicio</a></li>
       <!-- widgets.html -->

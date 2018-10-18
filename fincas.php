@@ -10,10 +10,12 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lista de Fincas</title>
-<link href="css/bootstrap.css" rel="stylesheet" type="text/css">
-
+<!--<link href="css/bootstrap.css" rel="stylesheet" type="text/css">-->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 <script src="jquery-3.3.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
         $('.nav.menu li').eq(2).addClass('active');
@@ -27,6 +29,49 @@
   }
   
 </script>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+  $('#btnAdd').on("click", function(){
+    $('#vistaModal').modal();
+  });
+});
+</script>
+
+<div class="modal fade" id="vistaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="tituloEvento"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+        <input type="hidden" id="txtId" name="txtId" />
+        Fecha: <input type="date" id="txtFecha" name="txtFecha" class="form-control" required/>
+        Tarea: <select id = "txtTitulo" name ="txtTitulo" class="form-control" required>       
+          </select><!--<input type="text" id="txtTitulo" name="txtTitulo" />-->
+        Hora Inicio: <input type="time" id="txtHora" name="txtHora" class="form-control" min="5:00" max="20:00" required/>
+        Hora Finalizacion: <input type="time" id="txtHoraFin" name="txtHoraFin" class="form-control" min="6:00" max="21:00" required/>
+        Descripcion: <textarea id="txtDesc" rows="3" placeholder="Escriba una descripcion de la tarea" class="form-control"> </textarea>
+        Costo $: <input type="number" id="numCosto" name="numCosto" value="0" class="form-control">
+        </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        
+        <button type="button" id="btnModificar" class="btn btn-primary">Guardar</button>
+        
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
 <body>
 <?php
 include("plantilla.php");
@@ -43,7 +88,7 @@ include("plantilla.php");
     
     <div class="row">
       <div class="col-lg-12">
-        <h1 class="page-header">Datos de Finca</h1>
+        <h1 class="page-header">Fincas Registradas</h1>
       </div>
     </div><!--/.row-->
 
@@ -83,7 +128,8 @@ include("plantilla.php");
 
       ?>
       </table>
-       <a href="nueva_finca.php"> <button type="button" class="btn btn-success"><span class='glyphicon glyphicon-plus'></span></button> </a>
+       <a href="nueva_finca.php"> <button type="button" class="btn btn-success"><span class='glyphicon glyphicon-plus'></span> Agregar</button> </a>
+       <!--<button type="button" class="btn btn-success" id="btnAdd"><span class='glyphicon glyphicon-plus'></span> Agregar</button>-->
           </div>
         </div>
       </div>

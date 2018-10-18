@@ -21,18 +21,12 @@
     $sql="SELECT * FROM vinedos";
     $resultado=mysqli_query($conn,$sql);
     while ($fila=mysqli_fetch_assoc($resultado)) {
-      if ($fila['id']==$id){?>
-          <option value="<?php echo $fila['id']?>" selected><?php echo $fila['nombre']?></option>
-          <?php
-      }else {?>
+      ?>
       <option value="<?php echo $fila['id']?>"><?php echo $fila['nombre']?></option>
       <?php
-      }
+      
     }
   }
-
-
-
 
 ?>
 <!DOCTYPE html>
