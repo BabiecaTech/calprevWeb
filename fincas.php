@@ -82,21 +82,22 @@ include("plantilla.php");
         <li><a href="#">
           <em class="fa fa-home"></em>
         </a></li>
-        <li class="active">Finca</li>
+        <li class="active">Fincas</li>
       </ol>
     </div><!--/.row-->
     
-    <div class="row">
+    <!--<div class="row">
       <div class="col-lg-12">
         <h1 class="page-header">Fincas Registradas</h1>
       </div>
-    </div><!--/.row-->
+    </div>/.row-->
 
     <div class="row">
 
       <div class="col-lg-12">
         <div class="panel panel-default">
           <div class="panel-body">
+            <a href="nueva_finca.php"> <button type="button" class="btn btn-success"><span class='glyphicon glyphicon-plus'></span> Agregar</button> </a>
              <table style="margin: auto; width: 800px; border-collapse: separate; border-spacing: 10px 5px;">
       <thead>
         <th>Nombre</th>
@@ -128,7 +129,6 @@ include("plantilla.php");
 
       ?>
       </table>
-       <a href="nueva_finca.php"> <button type="button" class="btn btn-success"><span class='glyphicon glyphicon-plus'></span> Agregar</button> </a>
        <!--<button type="button" class="btn btn-success" id="btnAdd"><span class='glyphicon glyphicon-plus'></span> Agregar</button>-->
           </div>
         </div>

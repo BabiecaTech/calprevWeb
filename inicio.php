@@ -11,13 +11,13 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Calendario</title>
-	<link href="css/bootstrap.min1.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<!--<link href="css/font-awesome.min.css" rel="stylesheet">
 	<link href="css/datepicker3.css" rel="stylesheet">-->
-	<link href="css/styles.css" rel="stylesheet">
+	
 	<link href='css/calendar.min.css' rel='stylesheet' />
 	<link href='css/calendar.print.min.css' rel='stylesheet' media='print' />
-	
+	<link href="css/styles.css" rel="stylesheet">
 	<!--Custom Font-->
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 	<!--[if lt IE 9]>
@@ -150,11 +150,11 @@
 			</ol>
 		</div><!--/.row-->
 		
-		<div class="row">
+		<!--<div class="row">
 			<div class="col-lg-12">
 				<h1 class="page-header">Inicio</h1>
 			</div>
-		</div><!--/.row-->
+		</div>/.row-->
 
 		<div class="row">
 			<div class="col-md-6">
@@ -296,11 +296,11 @@
 	</div>	<!--/.main-->
 	
 	<script src='js/moment.min.js'></script>
-	<script src='js/jquery.min.js'></script>
+	<script src="js/jquery-1.11.1.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
 	<script src='js/fullcalendar.min.js'></script>
 	<script src='idioma/es-us.js'></script>
 	<script src='js/jquery-ui.min.js'></script>
-	<!--<script src="js/custom.js"></script>-->
 	<script>
 
   	$(document).ready(function() {
