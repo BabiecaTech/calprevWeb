@@ -1,11 +1,5 @@
 <!DOCTYPE html>
 <?php
-  //include("conexion.php");
-  //$result_events = "SELECT id, title, color, start, end FROM events";
-  //$resultado = mysqli_query($conn, $result_events);
-  //$result_login = "SELECT * FROM login";
-  //$resultado = mysqli_query($conn, $result_login);
-  //$resultado1 = mysqli_query($conn, $result_login);
   function cargar_tareas (){
   	require("conexion.php");
   	$sql = "SELECT * FROM tareas ORDER BY nombre ASC";
@@ -32,9 +26,7 @@
   if (@!$_SESSION['user']) {
 
     header("Location:index.php");
-  }//elseif ($_SESSION['rol']==1) {
-   // header("Location:admin.php");
-  //}
+  }
   ?>
 <html>
 <head>
@@ -54,11 +46,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-<!--<script src="js/bootstrap.min.js"></script>-->
+
 <script>
 
    $(document).ready(function() {
-   		//var t =0;
 
     $('.nav.menu li').eq(1).addClass('active');
 
@@ -152,10 +143,7 @@
         	location.reload();
         }
       },
-      
-       // this allows things to be dropped onto the calendar
-    	//'http://localhost:8080/Ingenieria/caleprevWeb/eventos.php'
-      //events: a,
+    
       eventSources:[{
       	url:'http://localhost:8080/Ingenieria/caleprevWeb/eventos.php?accion=leer',
       	id:'inicio'}],
@@ -245,21 +233,6 @@
 
         recolectarDatosM();
         enviarDatos('modificar',tarea,true);
-    //alert(event.title + " end is now " + event.end.format());
-
-    /*if (confirm("desea relizar la modificacion?")) {
-  
-        $('#txtId').val(calEvent.id);
-        $('#txtTitulo').val(calEvent.title);
-        $('#txtDesc').val(calEvent.descripcion);
-
-        var fechaHora = calEvent.start.format().split("T");
-        $('#txtFecha').val(fechaHora[0]);
-        $('#txtHora').val(fechaHora[1]);
-
-        recolectarDatosM();
-        enviarDatos('modificar',tarea,true);
-    }*/
 
   },
   eventMouseover: function(event, jsEvent, view) {
@@ -396,16 +369,14 @@ eventMouseout: function(event, jsEvent, view) {
         <input type="hidden" id="txtId" name="txtId" />
         Fecha: <input type="date" id="txtFecha" name="txtFecha" class="form-control" required/>
         Tarea: <select id = "txtTitulo" name ="txtTitulo" class="form-control" required>
-              <!--<option value="Arar" selected >Arar</option>
-              <option value="Poda">Poda</option>
-              <option value="Curacion">Curacion</option>
-              <option value="Riego">Riego</option>
-              <option value="Desorrillar">Desorrillar</option>
-              <option value="Desbrote">Desbrote</option> -->
               <?php cargar_tareas();?>             
           </select><!--<input type="text" id="txtTitulo" name="txtTitulo" />-->
-        Hora Inicio: <input type="time" id="txtHora" name="txtHora" class="form-control" min="5:00" max="20:00" required/>
-        Hora Finalizacion: <input type="time" id="txtHoraFin" name="txtHoraFin" class="form-control" min="6:00" max="21:00" required/>
+          <table class="table">
+            <tr>  
+              <td> Hora Inicio: <input type="time" id="txtHora" name="txtHora" class="form-control" min="5:00" max="20:00" required/></td>
+              <td> Hora Finalizacion: <input type="time" id="txtHoraFin" name="txtHoraFin" class="form-control" min="6:00" max="21:00" required/></td>
+            </tr>
+          </table>
         Descripcion: <textarea id="txtDesc" rows="3" placeholder="Escriba una descripcion de la tarea" class="form-control"> </textarea>
         Costo $: <input type="number" id="numCosto" name="numCosto" value="0" class="form-control">
         Asignar a: <select id = "asignada" name ="asignada" class="form-control" required>
@@ -445,10 +416,14 @@ eventMouseout: function(event, jsEvent, view) {
         		<option value="tareaSelect">Seleccione Tarea</option>
               <?php cargar_tareas();?>
             </select>
-        Hora Inicio: <input type="time" id="txtHoraA" name="txtHoraA" class="form-control" min="5:00" max="20:00" required/>
-        Hora Finalizacion: <input type="time" id="txtHoraAfin" name="txtHoraAfin" class="form-control"min="6:00" max="21:00" required/>
+        <table class="table">
+          <tr>  
+          <td> Hora Inicio: <input type="time" id="txtHoraA" name="txtHoraA" class="form-control" min="5:00" max="20:00" required/></td>
+          <td> Hora Finalizacion: <input type="time" id="txtHoraAfin" name="txtHoraAfin" class="form-control"min="6:00" max="21:00" required/></td>
+          </tr>
+        </table>
         Descripcion: <textarea id="txtDescA" rows="3" placeholder="Escriba una descripcion de la tarea" class="form-control"> </textarea>
-        Costo $: <input type="number" id="numCostoA" name="numCostoA" value="0" class="form-control">
+        Costo Auxiliar $: <input type="number" id="numCostoA" name="numCostoA" value="0" class="form-control">
         Asignar a: <select id = "asignadaA" name ="asignadaA" class="form-control" required>
         			<option value="userSelect">Seleccione Usuario</option>
           			<?php cargar_usuarios();?>
@@ -606,13 +581,6 @@ include("plantilla.php");
         <li class="active">Calendario</li>
       </ol>
     </div><!--/.row-->
-    
-    <!--<div class="row">
-      <div class="col-lg-12">
-        <h1 class="page-header">Calendario</h1>
-      </div>
-    </div>/.row-->
-
     <div class="row">
 
       <div class="col-lg-9">

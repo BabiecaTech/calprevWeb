@@ -92,6 +92,15 @@ CREATE TABLE tareas (
   CONSTRAINT tareas_pk PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+DROP TABLE IF EXISTS notificaciones; -- notificaciones por fecha
+CREATE TABLE notificaciones (
+  fecha date NOT NULL,
+  titulo varchar(100) NOT NULL,
+  descripcion varchar(300),
+  id_finca int(10) NOT NULL,
+  CONSTRAINT notificacion_pk PRIMARY KEY (fecha)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 ALTER TABLE events ADD FOREIGN KEY(id_user) REFERENCES usuarios(id);
 ALTER TABLE usuarios ADD FOREIGN KEY(id_finca) REFERENCES fincas(id);
 ALTER TABLE fincas ADD FOREIGN KEY(id_tipo) REFERENCES vinedos(id);
@@ -99,6 +108,8 @@ ALTER TABLE finvin ADD FOREIGN KEY(id_finca) REFERENCES fincas(id);
 ALTER TABLE finvin ADD FOREIGN KEY(id_vinedo) REFERENCES vinedos(id);
 ALTER TABLE prodias ADD FOREIGN KEY(id_finca) REFERENCES fincas(id);
 ALTER TABLE prohoras ADD FOREIGN KEY(fecha) REFERENCES prodias(fecha);
+ALTER TABLE notificaciones ADD FOREIGN KEY(id_finca) REFERENCES fincas(id);
+
 --
 -- insertar datos
 --
@@ -123,30 +134,3 @@ INSERT INTO usuarios (id, user, password, email, pasadmin, rol, id_finca) VALUES
 INSERT INTO events (id, title, color, start, end, id_user) VALUES
 (1, 'Tarea 1', '#167EAF', '2018-05-09', '2018-05-15', 3),
 (2, 'Tarea 1', '#167EAF', '2018-05-09', '2018-05-12', 2);
-
-INSERT INTO tareas (nombre) VALUES ('Desbrotar');
-INSERT INTO tareas (nombre) VALUES ('Despegar Malla Antigranizo');
-INSERT INTO tareas (nombre) VALUES ('Despuntar');
-INSERT INTO tareas (nombre) VALUES ('Levantar Malla para Cosecha');
-INSERT INTO tareas (nombre) VALUES ('Poda');
-INSERT INTO tareas (nombre) VALUES ('Atada');
-INSERT INTO tareas (nombre) VALUES ('Armado de Barbechos');
-INSERT INTO tareas (nombre) VALUES ('Injertos');
-INSERT INTO tareas (nombre) VALUES ('Desorillar');
-INSERT INTO tareas (nombre) VALUES ('Rastrear');
-INSERT INTO tareas (nombre) VALUES ('Tapar');
-INSERT INTO tareas (nombre) VALUES ('Replantar y hacer Mugrones');
-INSERT INTO tareas (nombre) VALUES ('Curación Azufre');
-INSERT INTO tareas (nombre) VALUES ('Herbicidas');
-INSERT INTO tareas (nombre) VALUES ('Curación a base de sulfato');
-INSERT INTO tareas (nombre) VALUES ('Curación prevntiva para Polilla de la Vid');
-INSERT INTO tareas (nombre) VALUES ('Riego');
-INSERT INTO tareas (nombre) VALUES ('Acentar');
-INSERT INTO tareas (nombre) VALUES ('Cosecha');
-INSERT INTO tareas (nombre) VALUES ('Canales y Acequias');
-INSERT INTO tareas (nombre) VALUES ('Cambio maderas');
-INSERT INTO tareas (nombre) VALUES ('Tensado y Colocación de alámbres');
-INSERT INTO tareas (nombre) VALUES ('Abonos Naturales de alta duración');
-INSERT INTO tareas (nombre) VALUES ('Abonos Naturales de baja duración');
-INSERT INTO tareas (nombre) VALUES ('Fertilizantes liquidos');
-INSERT INTO tareas (nombre) VALUES ('Fertilizantes sólidos');

@@ -84,24 +84,16 @@ switch ($accion) {
 			$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
 			//echo json_encode($resultado);
 			$coordenadas = $resultado[0]['latitud'].",".$resultado[0]['longitud'];
-			//$hoy = date('y-m-j'); //obtiene fcha actual
-			//$nuevafecha = strtotime ( '+0 day' , strtotime ( $hoy ) ) ;
-			//$nuevafecha = date ( 'Y-m-j' , $nuevafecha );
-			//echo $nuevafecha;
-			//echo $coordenadas;
 			actualizarDb($coordenadas,$con);
 
 			break;
 
-			/*case 'reglas':
+		case 'notificar':
 			# code...
-			$sql=$con->prepare("SELECT * FROM events");
-			$sql->execute();
+			$hoy = date('Y-m-d');
+			actualizarNotificaciones($hoy,$con);
 
-			$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
-			cargarReglas($con,$resultado);
-
-			break;*/
+			break;
 
 		case 'cargar':
 			# code..
@@ -112,22 +104,8 @@ switch ($accion) {
 			//echo $mes;
 			if ($mes < 5 || $mes == 8){
 				$ano = date('Y' , strtotime($hoy));
-
-			//$arreglo = $_POST['eve'];
-			//echo $arreglo;
-			//$sql=$con->prepare("SELECT * FROM events");
-			//$sql->execute();
-
-			//$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
-			
-			//if ($tempera == 1){
-				//$sql=$con->prepare("SELECT * FROM events");
-				//$sql->execute();
-				//$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
-				//cargarTemperatura($ano,$mes,$con,$resultado);
 				cargarTemperatura($ano,$mes,$con,$arreglo);
 				//echo json_encode($resultado);
-			//}
 			}
 			echo json_encode($arreglo);
 			break;
@@ -203,11 +181,10 @@ function lunaCreciente($con, &$arreglo){
 	$i= 0;
 	while ( $i < $cant_fila) {
 		# code...
-		//if($respuesta[$i]['probLluvia'] > 70){
+
 			$dato = (object) ['start' => $respuesta[$i]['fecha'], 'overlap' => true, 'rendering' => 'background', 'color' => '#00ff00'];
+
 			$arreglo [] = $dato;
-		//	$i = $i + (24-$respuesta[$i]['hora']);
-		//}else {
 			$i++;
 		}
 }
@@ -220,11 +197,8 @@ function lunaDecreciente($con, &$arreglo){
 	$i = 0;
 	while ( $i < $cant_fila) {
 		# code...
-		//if($respuesta[$i]['probLluvia'] > 70){
 			$dato = (object) ['start' => $respuesta[$i]['fecha'], 'overlap' => true, 'rendering' => 'background', 'color' => '#00ff00'];
 			$arreglo [] = $dato;
-		//	$i = $i + (24-$respuesta[$i]['hora']);
-		//}else {
 			$i++;
 		}
 }
@@ -275,7 +249,7 @@ function cargarTemperatura($hoy,$con,&$arreglo){
 	}
 
 function cargarHumedad ($con, &$arreglo){
-	$sql=$con->prepare("SELECT DISTINCT fecha FROM prohoras WHERE humedad < 30");
+	$sql=$con->prepare("SELECT DISTINCT fecha FROM prohoras WHERE humedad < 30 OR  humedad > 60");
 	$sql->execute();
 	$respuesta = $sql->fetchAll(PDO::FETCH_ASSOC);
 	$cant_fila = count($respuesta);
@@ -286,7 +260,7 @@ function cargarHumedad ($con, &$arreglo){
 		$arreglo [] = $dato;
 		$i++;
 	}
-	$sql1=$con->prepare("SELECT DISTINCT fecha FROM prohoras WHERE humedad > 60");
+	/*$sql1=$con->prepare("SELECT DISTINCT fecha FROM prohoras WHERE humedad > 60");
 	$sql1->execute();
 	$respuesta = $sql1->fetchAll(PDO::FETCH_ASSOC);
 	$cant_fila = count($respuesta);
@@ -295,7 +269,7 @@ function cargarHumedad ($con, &$arreglo){
 		$dato = (object) ['start' => $respuesta[$i]['fecha'], 'overlap' => false, 'rendering' => 'background', 'color' => '#ff0000'];
 		$arreglo [] = $dato;
 		$i++;
-	}
+	}*/
 	//cargarViento($con,$arreglo);
 	//echo json_encode($arreglo);
 }
@@ -314,21 +288,43 @@ function cargarViento ($con,&$arreglo){
 	}
 }
 
+function actualizarNotificaciones ($actual, $con){
+	$sql=$con->prepare("DELETE FROM notificaciones WHERE fecha >='".$actual."'");
+	$sql->execute();
+	for ($cont_dia = 0; $cont_dia < 7; $cont_dia++){
+		$proxfecha = strtotime ('+'.$cont_dia.' day' , strtotime($actual));
+		$proxfecha = date ( 'Y-m-d' , $proxfecha );
+		$sql1=$con->prepare("SELECT DISTINCT fecha FROM prohoras WHERE fecha = '".$proxfecha."' AND humedad > 60");
+		$sql1->execute();
+		$resp = $sql1->fetchAll(PDO::FETCH_ASSOC);
+		if (count($resp) > 0) {
+			$sql2=$con->prepare("INSERT INTO notificaciones(fecha,titulo,descripcion,id_finca) VALUES (:fecha,:titulo,:descripcion,:id_finca)");
+
+			$sql2->execute(array(
+				'fecha' =>$proxfecha,
+				'titulo' =>"Alta Humedad",
+				'descripcion' =>"La humedad estara por arriba del 60%",
+				'id_finca' =>1
+			 ));
+		}
+
+	}
+
+}
+
 function actualizarDb($coordenadas,$con){
-	$hoy = date('Y-m-d'); //obtiene fcha actual
+
+	$hoy = date('Y-m-d'); //obtiene fecha actual
+	$sql=$con->prepare("DELETE FROM prohoras WHERE fecha >='".$hoy."'");
+	$sql->execute();
+	$sql=$con->prepare("DELETE FROM prodias WHERE fecha >='".$hoy."'");
+	$sql->execute();
 	for ($contador_dia = 0; $contador_dia < 153; $contador_dia++){
 		$nuevafecha = strtotime ('+'.$contador_dia.' day' , strtotime($hoy));
 		$nuevafecha = date ( 'Y-m-d' , $nuevafecha );
 		//echo $nuevafecha;
 		$api_url = 'https://api.darksky.net/forecast/376c2beb7497055b8abeed1596b9dd2f/'.$coordenadas.','.$nuevafecha.'T01:00:00?units=auto&exclude=flags,currently';
 		$forecast = json_decode(file_get_contents($api_url));
-
-		/*echo round($forecast->daily->data[$contador_dia]->temperatureMin);
-		echo "-".round($forecast->daily->data[$contador_dia]->temperatureMax);
-		echo "-".$forecast->daily->data[$contador_dia]->humidity*100;
-		echo "-".round($forecast->daily->data[$contador_dia]->pressure);
-		echo "-".round($forecast->daily->data[$contador_dia]->windSpeed);
-		echo "-".$forecast->daily->data[$contador_dia]->precipProbability*100;*/
 
 		$sql1=$con->prepare("INSERT INTO prodias(fecha,temperaturaMin,temperaturaMax,humedad,presion,viento,probLluvia,faseLunar,id_finca) VALUES (:fecha,:temperaturaMin,:temperaturaMax,:humedad,:presion,:viento,:probLluvia,:faseLunar,:id_finca)");
 
@@ -359,6 +355,7 @@ function actualizarDb($coordenadas,$con){
 		
 	}
 	echo json_encode($respuesta);
+	actualizarNotificaciones ($hoy, $con);
 
 }
 ?>
