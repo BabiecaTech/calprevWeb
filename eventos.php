@@ -115,7 +115,7 @@ switch ($accion) {
 		cargarLluvia($con,$arreglo);
 		cargarHumedad($con,$arreglo);
 		cargarViento($con,$arreglo);
-		lunaCreciente($con,$arreglo);
+		lunaCreciente($con,$arreglo,3);
 		echo json_encode($arreglo);
 		break;
 
@@ -123,21 +123,21 @@ switch ($accion) {
 		$arreglo=[];
 		cargarLluvia($con,$arreglo);
 		cargarViento($con,$arreglo);
-		lunaDecreciente($con,$arreglo);
+		lunaDecreciente($con,$arreglo,4);
 		echo json_encode($arreglo);
 		break;
 
 		case 'plantas':
 		$arreglo=[];
 		cargarLluvia($con,$arreglo);
-		lunaDecreciente($con,$arreglo);
+		lunaDecreciente($con,$arreglo,5);
 		echo json_encode($arreglo);
 		break;
 
 		case 'vendimia':
 		$arreglo=[];
 		cargarLluvia($con,$arreglo);
-		lunaCreciente($con,$arreglo);
+		lunaCreciente($con,$arreglo,2);
 		echo json_encode($arreglo);
 		break;
 
@@ -156,10 +156,16 @@ switch ($accion) {
 				//$ano = date('Y' , strtotime($hoy));
 				cargarTemperatura($hoy,$con, $arreglo);
 			}
-		lunaCreciente($con,$arreglo);
+		lunaCreciente($con,$arreglo,1);
 		echo json_encode($arreglo);
 		//echo $hoy;
 		break;
+
+		/*case 'creciente':
+		$arreglo=[];
+		lunaCreciente($con,$arreglo,2);
+		echo json_encode($arreglo);
+		break;*/
 
 		case 'leer':
 		# code..
@@ -173,8 +179,17 @@ switch ($accion) {
 		break;
 }
 
-function lunaCreciente($con, &$arreglo){
-	$sql=$con->prepare("SELECT fecha FROM `prodias` WHERE faseLunar > 0.02 AND faseLunar <0.48");
+function lunaCreciente($con, &$arreglo, $select){
+	if ($select == 3){
+		$condicion = "SELECT DISTINCT fecha FROM prohoras WHERE humedad < 30 OR humedad > 60 OR probLluvia >= 70 OR viento >10" ;
+		}
+	if ($select == 2){
+		$condicion = "SELECT DISTINCT fecha FROM prohoras WHERE  probLluvia >= 70" ;
+		}
+	if ($select == 1){
+		$condicion = "SELECT DISTINCT fecha FROM prohoras WHERE probLluvia >= 70 OR temperatura < 4" ;
+		}
+	$sql=$con->prepare("SELECT DISTINCT fecha FROM vista_cond WHERE fecha NOT IN (".$condicion.") AND faseLunar > 0.02 AND faseLunar <0.48");
 	$sql->execute();
 	$respuesta = $sql->fetchAll(PDO::FETCH_ASSOC);
 	$cant_fila = count($respuesta);
@@ -187,10 +202,18 @@ function lunaCreciente($con, &$arreglo){
 			$arreglo [] = $dato;
 			$i++;
 		}
+
+	
 }
 
-function lunaDecreciente($con, &$arreglo){
-	$sql=$con->prepare("SELECT fecha FROM `prodias` WHERE faseLunar > 0.52 AND faseLunar <0.99");
+function lunaDecreciente($con, &$arreglo, $select){
+	if ($select == 4){
+		$condicion = "SELECT DISTINCT fecha FROM prohoras WHERE probLluvia >= 70 OR viento >10" ;
+		}
+	if ($select == 5){
+		$condicion = "SELECT DISTINCT fecha FROM prohoras WHERE probLluvia >= 70" ;
+		}
+	$sql=$con->prepare("SELECT DISTINCT fecha FROM vista_cond WHERE fecha NOT IN (".$condicion.") AND faseLunar > 0.52 AND faseLunar <0.99");
 	$sql->execute();
 	$respuesta = $sql->fetchAll(PDO::FETCH_ASSOC);
 	$cant_fila = count($respuesta);
