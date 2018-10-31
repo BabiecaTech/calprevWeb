@@ -98,36 +98,36 @@ include("plantilla.php");
         <div class="panel panel-default">
           <div class="panel-body">
             <a href="nueva_finca.php"> <button type="button" class="btn btn-success"><span class='glyphicon glyphicon-plus'></span> Agregar</button> </a>
-             <table style="margin: auto; width: 800px; border-collapse: separate; border-spacing: 10px 5px;">
-      <thead>
-        <th>Nombre</th>
-        <th>Hetareas</th>
-        <th>Tipo viñedo</th>
-      </thead>
-      
-      <?php
-      require("conexion.php");
-      $sql="SELECT * FROM fincas";
-      $resultado=mysqli_query($conn,$sql);
-      //echo ($resultado);
-      while($filas=mysqli_fetch_assoc($resultado))
-      {
-        echo "<tr>";
-          echo "<td>"; echo $filas['nombre']; echo "</td>";
-          echo "<td>"; echo $filas['hectareas']; echo "</td>";
-          $id_tipo=$filas['id_tipo'];
-          $consulta= "SELECT * FROM vinedos WHERE id = $id_tipo";
-          $resultado1=mysqli_query($conn,$consulta);
-          if ($row=mysqli_fetch_assoc($resultado1)){
-            echo "<td>"; echo $row['nombre']; echo "</td>";
-          }
+             <table class="table">
+              <thead>
+                <th>Nombre</th>
+                <th>Hetareas</th>
+                <th>Tipo viñedo</th>
+              </thead>
+              
+              <?php
+              require("conexion.php");
+              $sql="SELECT * FROM fincas";
+              $resultado=mysqli_query($conn,$sql);
+              //echo ($resultado);
+              while($filas=mysqli_fetch_assoc($resultado))
+              {
+                echo "<tr>";
+                  echo "<td>"; echo $filas['nombre']; echo "</td>";
+                  echo "<td>"; echo $filas['hectareas']; echo "</td>";
+                  $id_tipo=$filas['id_tipo'];
+                  $consulta= "SELECT * FROM vinedos WHERE id = $id_tipo";
+                  $resultado1=mysqli_query($conn,$consulta);
+                  if ($row=mysqli_fetch_assoc($resultado1)){
+                    echo "<td>"; echo $row['nombre']; echo "</td>";
+                  }
 
-          echo "<td><a href='modif_finca.php?id=".$filas['id']."'> <button type='button' class='btn btn-info'><span class='glyphicon glyphicon-pencil'></span></button> </a> </td>";
-          echo "<td><button type='button' class='btn btn-danger' onclick='eliminarFinca(".$filas['id'].")'><span class='glyphicon glyphicon-trash'></span></button> </td>";
-        echo "</tr>";
-      }
+                  echo "<td><a href='modif_finca.php?id=".$filas['id']."'> <button type='button' class='btn btn-info'><span class='glyphicon glyphicon-pencil'></span></button> </a> </td>";
+                  echo "<td><button type='button' class='btn btn-danger' onclick='eliminarFinca(".$filas['id'].")'><span class='glyphicon glyphicon-trash'></span></button> </td>";
+                echo "</tr>";
+              }
 
-      ?>
+              ?>
       </table>
        <!--<button type="button" class="btn btn-success" id="btnAdd"><span class='glyphicon glyphicon-plus'></span> Agregar</button>-->
           </div>

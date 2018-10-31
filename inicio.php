@@ -69,7 +69,7 @@
 			<div class="col-md-6">
 				<div class="panel panel-default articles">
 					<div class="panel-heading">
-						Ultimas Notificaciones
+						Alertas y Notificaciones
 						<span class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span></div>
 					<div class="panel-body articles-container">
 
@@ -93,10 +93,14 @@
 
 					<div class="panel panel-default ">
 					<div class="panel-heading">
-						Barra de Costos
+						Gastos
 						<span class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span></div>
 					<div class="panel-body">
-						<div class="col-md-12 no-padding">
+						<div class="canvas-wrapper">
+							<canvas class="chart" id="pie-chart" ></canvas>
+						</div>
+	
+						<!--<div class="col-md-12 no-padding">
 							<div class="row progress-labels">
 								<div class="col-sm-6">General</div>
 								<div class="col-sm-6" style="text-align: right;">80%</div>
@@ -125,7 +129,9 @@
 							<div class="progress">
 								<div data-percentage="0%" style="width: 20%;" class="progress-bar progress-bar-red" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
 							</div>
-						</div>
+						</div>-->
+
+						
 					</div>
 				</div>
 
@@ -136,29 +142,37 @@
 			</div>-->
 		</div><!--/.row-->
 	</div>	<!--/.main-->
-	
+
 	<script src='js/moment.min.js'></script>
 	<script src="js/jquery-1.11.1.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
+	
+	<script type="text/javascript" src="js/Chart.bundle.min.js"></script>
 	<script src='js/fullcalendar.min.js'></script>
 	<script src='idioma/es-us.js'></script>
 	<script src='js/jquery-ui.min.js'></script>
+	<script src="js/custom.js"></script>
 	<script>
 
   	$(document).ready(function() {
 
+	/*var chart4 = document.getElementById("pie-chart").getContext("2d");
+	window.myPie = new Chart(chart4).Pie(pieData, {
+	responsive: true,
+	segmentShowStroke: false
+	});*/
   	$('.nav.menu li').eq(0).addClass('active');
 
     $('#calendar').fullCalendar({
       header: {
         //left: 'prev,next today',
         //center: 'title',
-        //right: 'month,agendaWeek,agendaDay,listMonth'
+        right: 'month, today, prev,next'
       },
       defaultDate: new Date(),
-      navLinks: false, // can click day/week names to navigate views
+      navLinks: true, // can click day/week names to navigate views
       businessHours: false, // display business hours
-
+      eventLimit: true,
       eventSources:[{
       	url:'http://localhost:8080/Ingenieria/caleprevWeb/eventos.php?accion=leer',
       	id:'inicio',
@@ -167,6 +181,37 @@
       droppable: false,
 
     });
+
+    var chart = document.getElementById("pie-chart").getContext("2d");
+	var myPie = new Chart(chart, {
+					type: 'pie',
+			data : {
+				labels : [
+					"Generales",
+					"Combustible",
+					"Auxiliar",
+					"impuestos"
+				],
+				datasets :[{
+					data : [
+						40,
+						30,
+						20,
+						10,
+						
+					],
+					backgroundColor: [
+						"#F7464A",
+						"#4D5360",
+						"#FDB45C",
+						"#46BFBD"
+					]
+				}]
+			},
+			options : {
+				responsive : true,
+			}
+	});
 
   });
 

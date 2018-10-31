@@ -308,6 +308,17 @@ eventMouseout: function(event, jsEvent, view) {
   #tarea6{
     background: #0066ff;
   } 
+
+  #favorable{
+    background: #00ff00;
+    opacity: .5;
+  }
+
+  #noFavorable{
+    background: #ff0000;
+    opacity: .5;
+  } 
+
   #external-events p {
     margin: 1.5em 0;
     font-size: 14px;
@@ -605,6 +616,22 @@ include("plantilla.php");
                   <li id="4"><div class='fc-event' id="tarea4"><a href="#">Apliques y abonos</a></div></li>
                   <li id="5"><div class='fc-event' id="tarea5"><a href="#">Vendimia</a></div></li>
                   <li id="6"><div class='fc-event' id="tarea6"><a href="#">Mantenimiento</a></div></li>
+                </ul>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+
+      <div class="col-lg-3">
+        <div class="panel panel-default">
+          <div class="panel-body">
+          <div id='wrap'>
+            <div id='external-events'>
+              <h4>Referencias</h4>
+                <ul class="menu2">
+                  <li id="1"><div class='fc-event' id="favorable"></div></li><h5>Día Recomendable</h5>
+                  <li id="2"><div class='fc-event' id="noFavorable"></div></li><h5>Día No Recomendable</h5>
                 </ul>
             </div>
           </div>

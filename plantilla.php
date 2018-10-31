@@ -51,6 +51,7 @@
       <!-- widgets.html -->
       <li><a href="calendar.php"><em class="fa fa-calendar">&nbsp;</em> Calendario</a></li>
       <li><a href="fincas.php"><em class="fa fa-clone">&nbsp;</em> Finca</a></li>
+       <li><a href="contable.php"><em class="fa fa-navicon">&nbsp;</em> Gestion Contable</a></li>
       
       <li><a href="index.php"><em class="fa fa-power-off">&nbsp;</em> Salir</a></li>
     </ul>
