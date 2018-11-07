@@ -3,12 +3,12 @@ header('Content-Type: application/json');
 $con= new PDO("mysql:dbname=calendario;host=localhost","root","");
 
 $accion = (isset($_GET['accion']))?$_GET['accion']:'leer';
-$tempera = (isset($_GET['temp']))?$_GET['temp']:0;
+$id_finca = (isset($_GET['id']))?$_GET['id']:0;
 switch ($accion) {
 	case 'agregar':
 		# code...
 			$color = obtenerColor($con, $_POST['title']);
-			$sql=$con->prepare("INSERT INTO events(title,descripcion,costo,color,start,end,asignar,id_user) VALUES (:title,:descripcion,:costo,:color,:start,:end,:asignar,:id_user)");
+			$sql=$con->prepare("INSERT INTO events(title,descripcion,costo,color,start,end,asignar,id_user,id_finca) VALUES (:title,:descripcion,:costo,:color,:start,:end,:asignar,:id_user,:id_finca)");
 
 			$respuesta=$sql->execute(array(
 				'title' =>$_POST['title'],
@@ -18,7 +18,8 @@ switch ($accion) {
 				'start' =>$_POST['start'],
 				'end' =>$_POST['end'],
 				'asignar' =>$_POST['asignar'],
-				'id_user' =>$_POST['id_user']
+				'id_user' =>$_POST['id_user'],
+				'id_finca' =>$_POST['id_finca']
 			 ));
 			echo json_encode($respuesta);
 		break;
@@ -26,7 +27,7 @@ switch ($accion) {
 	case 'agregard':
 		# code...
 			$color = obtenerColor($con, $_POST['title']);
-			$sql=$con->prepare("INSERT INTO events(title,descripcion,costo,color,start,end,asignar,id_user) VALUES (:title,:descripcion,:costo,:color,:start,:end,:asignar,:id_user)");
+			$sql=$con->prepare("INSERT INTO events(title,descripcion,costo,color,start,end,asignar,id_user,id_finca) VALUES (:title,:descripcion,:costo,:color,:start,:end,:asignar,:id_user),:id_finca");
 
 			$respuesta=$sql->execute(array(
 				'title' =>$_POST['title'],
@@ -36,7 +37,8 @@ switch ($accion) {
 				'start' =>$_POST['start'],
 				'end' =>$_POST['end'],
 				'asignar'=>$_POST['asignar'],
-				'id_user' =>$_POST['id_user']
+				'id_user' =>$_POST['id_user'],
+				'id_finca' =>$_POST['id_finca']
 			 ));
 			echo json_encode($respuesta);
 		break;
@@ -169,12 +171,14 @@ switch ($accion) {
 
 		case 'leer':
 		# code..
-			$sql=$con->prepare("SELECT * FROM events");
+			if ($id_finca<> 0){
+			$sql=$con->prepare("SELECT * FROM events WHERE id_finca =".$id_finca."");
 			$sql->execute();
 
 			$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
 
 			echo json_encode($resultado);
+			}
 
 		break;
 }

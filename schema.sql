@@ -98,8 +98,10 @@ CREATE TABLE notificaciones (
   titulo varchar(100) NOT NULL,
   descripcion varchar(300),
   id_finca int(10) NOT NULL,
-  CONSTRAINT notificacion_pk PRIMARY KEY (fecha)
+  CONSTRAINT notificacion_pk PRIMARY KEY (fecha,id_finca)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `finvin` ( `id_finca` int(10) NOT NULL, `id_vinedo` int(10) NOT NULL, `cant_hectarea` int(10) NOT NULL, CONSTRAINT finvin_pk PRIMARY KEY (id_finca,id_vinedo) ) ENGINE=InnoDB DEFAULT CHARSET=latin1
 
 ALTER TABLE events ADD FOREIGN KEY(id_user) REFERENCES usuarios(id);
 ALTER TABLE usuarios ADD FOREIGN KEY(id_finca) REFERENCES fincas(id);
@@ -134,3 +136,13 @@ INSERT INTO usuarios (id, user, password, email, pasadmin, rol, id_finca) VALUES
 INSERT INTO events (id, title, color, start, end, id_user) VALUES
 (1, 'Tarea 1', '#167EAF', '2018-05-09', '2018-05-15', 3),
 (2, 'Tarea 1', '#167EAF', '2018-05-09', '2018-05-12', 2);
+
+SELECT prodias.fecha, prohoras.humedad, prodias.faseLunar FROM prohoras INNER JOIN prodias ON prohoras.fecha = prodias.fecha
+
+SELECT fecha FROM vista_cond WHERE faseLunar > 0.02 AND faseLunar <0.48 AND ( humedad > 30 OR  humedad < 60)
+
+SELECT fecha FROM vista_cond WHERE fecha NOT IN (SELECT DISTINCT fecha FROM prohoras WHERE humedad < 30 OR humedad > 60)
+
+SELECT DISTINCT fecha FROM vista_cond WHERE fecha NOT IN (SELECT DISTINCT fecha FROM prohoras WHERE humedad < 30 OR humedad > 60)
+
+SELECT DISTINCT fecha FROM vista_cond WHERE fecha NOT IN (SELECT DISTINCT fecha FROM prohoras WHERE humedad < 30 OR humedad > 60) AND faseLunar > 0.02 AND faseLunar <0.48

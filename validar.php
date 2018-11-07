@@ -17,18 +17,13 @@ session_start();
 			$_SESSION['user']=$f2['user'];
 			$_SESSION['rol']=$f2['rol'];
 
-			header("Location: inicio.php");
+			header("Location: inicio1.php?id=1");
 		}else {
-			echo '<script>alert("CONTRASEÑA INCORRECTA")</script> ';
-		
+			echo '<script>alert("CONTRASEÑA INCORRECTA")</script>';
 			echo "<script>location.href='index.php'</script>";
 		}
 	}else{
-		
-		echo '<script>alert("ESTE USUARIO NO EXISTE")</script> ';
-		
-		echo "<script>location.href='index.php'</script>";	
-
+		echo '<script>alert("ESTE USUARIO NO EXISTE")</script>';
+		echo "<script>location.href='index.php'</script>";
 	}
-
 ?>

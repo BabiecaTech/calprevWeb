@@ -23,7 +23,7 @@
 	<neta charset="UTF-8">
 	<title></title>
   <link href="css/styles.css" rel="stylesheet">
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" crossorigin="anonymous">
   <script src="jquery-3.3.1.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -359,7 +359,7 @@ $('#tabla tbody tr').each(function(){
 
 
 	<script async defer
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyApOJsPlmxLMPX7dkF9Se0fS_72CFgLwP8&callback=initMap">
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDs_gz9GrT_4ATiW3TfwIoGvwsrBOj2LbM&callback=initMap">
     </script>
 
 
