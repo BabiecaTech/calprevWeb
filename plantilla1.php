@@ -68,8 +68,9 @@
       <li><a href="#" id="inicio" ><em class="fa fa-dashboard">&nbsp;</em> Inicio</a></li>
       <!-- widgets.html -->
       <li><a href="calendar.php" id="calendario" ><em class="fa fa-calendar">&nbsp;</em> Calendario</a></li>
-      <li><a href="fincas.php" id="finca"><em class="fa fa-clone">&nbsp;</em> Finca</a></li>
+      <li><a href="fincas.php" id="finca"><em class="fa fa-clone">&nbsp;</em> Fincas</a></li>
        <li><a href="contable.php" id="contable"><em class="fa fa-navicon">&nbsp;</em> Gestion Contable</a></li>
+       <li><a href="lista_usuarios.php" id="finca"><em class="fa fa-user">&nbsp;</em> Usuarios</a></li>
       
       <li><a href="index.php"><em class="fa fa-power-off">&nbsp;</em> Salir</a></li>
     </ul>

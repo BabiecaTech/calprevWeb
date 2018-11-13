@@ -161,10 +161,10 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="tituloEvento"></h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
+        <h5 class="modal-title" id="tituloEvento"></h5>
       </div>
       <div class="modal-body">
         <form>
@@ -181,7 +181,13 @@
             </tr>
           </table>
         Descripcion: <textarea id="txtDesc" rows="3" placeholder="Escriba una descripcion de la tarea" class="form-control"> </textarea>
-        Costo $: <input type="number" id="numCosto" name="numCosto" value="0" class="form-control">
+        <table class="table">
+            <tr>  
+              <td>Costo Auxiliar $: <input type="number" id="numCosto" name="numCosto" value="0" class="form-control" min="0"></td>
+              <td>Costo Combustible $: <input type="number" id="numCombustible" name="numCombustible" value="0" class="form-control" min="0"></td>
+            </tr>
+          </table>
+        
         Asignar a: <select id = "asignada" name ="asignada" class="form-control" required>
           		<?php cargar_usuarios();?>
             </select>
@@ -204,10 +210,10 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="tituloEvento"> Nueva Tarea</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
+        <h5 class="modal-title" id="tituloEvento"> Nueva Tarea</h5>
       </div>
       <div class="modal-body">
         <!--<div id="descripcionEvento"></div>-->
@@ -226,7 +232,12 @@
           </tr>
         </table>
         Descripcion: <textarea id="txtDescA" rows="3" placeholder="Escriba una descripcion de la tarea" class="form-control"> </textarea>
-        Costo Auxiliar $: <input type="number" id="numCostoA" name="numCostoA" value="0" class="form-control">
+        <table class="table">
+            <tr>  
+              <td>Costo Auxiliar $: <input type="number" id="numCostoA" name="numCostoA" value="0" class="form-control" min="0"></td>
+              <td>Costo Combustible $: <input type="number" id="numCombustibleA" name="numCombustibleA" value="0" class="form-control" min="0"></td>
+            </tr>
+          </table>
         Asignar a: <select id = "asignadaA" name ="asignadaA" class="form-control" required>
         			<option value="userSelect">Seleccione Usuario</option>
           			<?php cargar_usuarios();?>
@@ -253,7 +264,7 @@ include("plantilla1.php");
     <div class="row">
       <ol class="breadcrumb">
         <li><a href="#">
-          <em class="fa fa-home"></em>
+          <em class="fa fa-calendar"></em>
         </a></li>
         <li class="active">Calendario</li>
       </ol>
@@ -403,6 +414,7 @@ include("plantilla1.php");
        var t = {title:$.trim($(this).text()),
                 descripcion:'',
                 costo:0,
+                costo_combustible:0,
                 start:fechaHora+" "+"05:00:00",
                 end:fechaHora+" "+"06:00:00",
                 editable:1,
@@ -432,6 +444,7 @@ include("plantilla1.php");
         $('#txtHoraA').val("05:00");
         $('#txtHoraAfin').val("06:00");
         $('#numCostoA').val("0");
+        $('#numCombustibleA').val("0");
         $('#asignadaA').val("userSelect");
         $('#agregarModal').modal();
     }else{
@@ -442,6 +455,7 @@ include("plantilla1.php");
       },
 
       eventClick:function(calEvent,jsEvent,view){
+        //alert(calEvent.costo_combustible);
         var moment = $('#calendar').fullCalendar('getDate').format().split("T");
         var fechaHora = calEvent.start.format().split("T");
         var fechaHoraFin = calEvent.end.format().split("T");
@@ -449,6 +463,7 @@ include("plantilla1.php");
         $('#tituloEvento').html(calEvent.title);
         $('#txtDesc').val(calEvent.descripcion);
         $('#numCosto').val(calEvent.costo);
+        $('#numCombustible').val(calEvent.costo_combustible);
         $('#asignada').val(calEvent.asignar);
         $('#txtId').val(calEvent.id);
         $('#txtTitulo').val(calEvent.title);
@@ -476,6 +491,7 @@ include("plantilla1.php");
           $('#txtTitulo').val(calEvent.title);
           $('#txtDesc').val(calEvent.descripcion);
           $('#numCosto').val(calEvent.costo);
+          $('#numCombustible').val(calEvent.costo_combustible);
           $('#asignada').val(calEvent.asignar);
         
           $('#txtFecha').val(fechaHora[0]);
@@ -498,6 +514,7 @@ include("plantilla1.php");
         $('#txtTitulo').val(calEvent.title);
         $('#txtDesc').val(calEvent.descripcion);
         $('#numCosto').val(calEvent.costo);
+        $('#numCombustible').val(calEvent.costo_combustible);
         $('#asignada').val(calEvent.asignar);
         
         $('#txtFecha').val(fechaHora[0]);
@@ -574,6 +591,7 @@ eventMouseout: function(event, jsEvent, view) {
       title:$('#txtTituloA').val(),
       descripcion:$('#txtDescA').val(),
       costo:$('#numCostoA').val(),
+      costo_combustible:$('#numCombustibleA').val(),
       asignar:$('#asignadaA').val(),
       start:$('#txtFechaA').val()+" "+$('#txtHoraA').val(),
       end:$('#txtFechaA').val()+" "+$('#txtHoraAfin').val(),
@@ -589,6 +607,7 @@ function recolectarDatosM(){
       title:$('#txtTitulo').val(),
       descripcion:$('#txtDesc').val(),
       costo:$('#numCosto').val(),
+      costo_combustible:$('#numCombustible').val(),
       start:$('#txtFecha').val()+" "+$('#txtHora').val(),
       end:$('#txtFecha').val()+" "+$('#txtHoraFin').val(),
       asignar:$('#asignada').val(),

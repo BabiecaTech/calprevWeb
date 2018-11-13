@@ -8,12 +8,13 @@ switch ($accion) {
 	case 'agregar':
 		# code...
 			$color = obtenerColor($con, $_POST['title']);
-			$sql=$con->prepare("INSERT INTO events(title,descripcion,costo,color,start,end,asignar,id_user,id_finca) VALUES (:title,:descripcion,:costo,:color,:start,:end,:asignar,:id_user,:id_finca)");
+			$sql=$con->prepare("INSERT INTO events(title,descripcion,costo,costo_combustible,color,start,end,asignar,id_user,id_finca) VALUES (:title,:descripcion,:costo,:costo_combustible,:color,:start,:end,:asignar,:id_user,:id_finca)");
 
 			$respuesta=$sql->execute(array(
 				'title' =>$_POST['title'],
 				'descripcion' =>$_POST['descripcion'],
 				'costo' =>$_POST['costo'],
+				'costo_combustible' =>$_POST['costo_combustible'],
 				'color' =>$color,
 				'start' =>$_POST['start'],
 				'end' =>$_POST['end'],
@@ -27,12 +28,13 @@ switch ($accion) {
 	case 'agregard':
 		# code...
 			$color = obtenerColor($con, $_POST['title']);
-			$sql=$con->prepare("INSERT INTO events(title,descripcion,costo,color,start,end,asignar,id_user,id_finca) VALUES (:title,:descripcion,:costo,:color,:start,:end,:asignar,:id_user),:id_finca");
+			$sql=$con->prepare("INSERT INTO events(title,descripcion,costo,costo_combustible,color,start,end,asignar,id_user,id_finca) VALUES (:title,:descripcion,:costo,:costo_combustible,:color,:start,:end,:asignar,:id_user),:id_finca");
 
 			$respuesta=$sql->execute(array(
 				'title' =>$_POST['title'],
 				'descripcion' =>$_POST['descripcion'],
 				'costo' =>$_POST['costo'],
+				'costo_combustible' =>$_POST['costo_combustible'],
 				'color' =>$color,
 				'start' =>$_POST['start'],
 				'end' =>$_POST['end'],
@@ -59,6 +61,7 @@ switch ($accion) {
 				title=:title, 
 				descripcion=:descripcion,
 				costo=:costo,
+				costo_combustible=:costo_combustible,
 				color=:color,
 				start=:start,
 				end=:end,
@@ -70,6 +73,7 @@ switch ($accion) {
 				'title' =>$_POST['title'],
 				'descripcion' =>$_POST['descripcion'],
 				'costo' =>$_POST['costo'],
+				'costo_combustible' =>$_POST['costo_combustible'],
 				'color' =>$color,
 				'start' =>$_POST['start'],
 				'end' =>$_POST['end'],

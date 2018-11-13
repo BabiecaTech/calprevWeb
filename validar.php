@@ -11,7 +11,7 @@ session_start();
 			$_SESSION['id']=$f2['id'];
 			$_SESSION['user']=$f2['user'];
 			$_SESSION['rol']=$f2['rol'];
-			header("Location: lista_usuarios.php");
+			header("Location: inicio1.php?id=1");
 		}else if($pass==$f2['password']){
 			$_SESSION['id']=$f2['id'];
 			$_SESSION['user']=$f2['user'];

@@ -6,7 +6,10 @@
 	<title>Login</title>
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/datepicker3.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<link href="css/styles.css" rel="stylesheet">
+	<script src="js/jquery-1.11.1.min.js"></script>
+
 </head>
 <body>
 	<div class="row">
@@ -29,15 +32,17 @@
 							</div>-->
 							<!--<a href="index.html" class="btn btn-primary">Login</a>-->
 							<input class="btn btn-primary" type="submit" value="INGRESAR">
+							<div class="form-group">
+							
+							No tiene una cuenta ..? <a href="nuevo_user.php">Registrate aquí</a>
+						
+							</div>    
 						</fieldset>
 					</form>
 				</div>
 			</div>
 		</div><!-- /.col-->
 	</div><!-- /.row -->	
-	
 
-<script src="js/jquery-1.11.1.min.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </body>
 </html>

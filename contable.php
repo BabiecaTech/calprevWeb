@@ -25,6 +25,7 @@
 		var chart = document.getElementById("pie-chart").getContext("2d");
 		var myPie = new Chart(chart, {
 					type: 'pie',
+
 			data : {
 				labels : [
 					"Generales",
@@ -48,8 +49,15 @@
 					]
 				}]
 			},
-			options : {
+			options: {
 				responsive : true,
+        		legend: {
+   					position:'bottom'
+        		},
+        		animation: {
+    				animateRotate: false,
+    				animateScale: true
+  				}
 			}
 	});
 
@@ -64,7 +72,7 @@
     <div class="row">
       <ol class="breadcrumb">
         <li><a href="#">
-          <em class="fa fa-home"></em>
+          <em class="fa fa-navicon"></em>
         </a></li>
         <li class="active">Gestión Contable</li>
       </ol>

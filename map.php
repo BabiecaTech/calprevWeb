@@ -9,9 +9,6 @@
 <html>
 <link href="css/styles.css" rel="stylesheet">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" crossorigin="anonymous">
-  <script src="jquery-3.3.1.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<style>
   #map {
     height: 60%;
@@ -95,22 +92,20 @@
   <div class="row">
     <div class="col-lg-12">
         <div class="panel panel-default">
-          <div class="panel-heading">
+          <div class="panel-body">
             <form class="form-inline" method="post">
-            <div class="form-group mx-auto my-5">
+            
               <label class="sr-only" for="lacation"></label>
               <input type="text" class="form-control" id="location" name="location" placeholder="ingrese ubicacion">
               <button class="btn btn-primary" type="button" onclick="buscar();">Buscar</button>
               <button style="margin-left:10px " class="btn btn-secondary" type="button" onclick="actual();">Localizacion Actual</button>
-            </div>
+          
             <input type="hidden" id="latitud" name="latitud" />
             <input type="hidden" id="longitud" name="longitud" />
             <input type="hidden" id="cantVino" name="cantVino" value=0 />
-            </form>
-            </div>
-          <div class="panel-body">
+            </form>          
 
-            <div class="mapa">
+            <div class="mapa" style="margin-top: 10px">
 
             <div id="map" style="width:100%;height:400px;"></div>
 
@@ -125,8 +120,8 @@
 
 </body>
 <script src="jquery-3.3.1.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script>
   var map;
   var marker;

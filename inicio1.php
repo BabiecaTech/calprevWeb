@@ -17,8 +17,9 @@
 	$hasta = date ( 'Y-m-j' , $hasta );
   	//echo ($hasta);
   	$sql = "SELECT * FROM notificaciones WHERE fecha >='".$hoy."'AND fecha <= '".$hasta."'AND id_finca = '".$id_finca."'ORDER BY fecha ASC";
-  	$respusta = mysqli_query($conn, $sql);
-  	while($fila = mysqli_fetch_assoc($respusta)){
+  	$respuesta = mysqli_query($conn, $sql);
+  	if ( $respuesta->num_rows > 0){
+  	while($fila = mysqli_fetch_assoc($respuesta)){
   		?>
   		<div class="article border-bottom">
 			<div class="col-xs-12">
@@ -37,6 +38,11 @@
 		</div><!--End .article-->
   		<?php
     }
+	}else{
+		echo "<div class='col-xs-10 col-md-10'>";
+		echo "<p>Momentaneamente No se Registran Alertas Climatologicas para los proximos dias.</p>";
+		echo "</div>";
+	}
  }
 ?>
 <html>
@@ -64,7 +70,7 @@
 		<div class="row">
 			<ol class="breadcrumb">
 				<li><a href="#">
-					<em class="fa fa-home"></em>
+					<em class="fa fa-dashboard"></em>
 				</a></li>
 				<li class="active">Inicio</li>
 			</ol>
@@ -158,6 +164,7 @@
     var chart = document.getElementById("pie-chart").getContext("2d");
 	var myPie = new Chart(chart, {
 					type: 'pie',
+
 			data : {
 				labels : [
 					"Generales",
@@ -180,9 +187,18 @@
 						"#46BFBD"
 					]
 				}]
+
 			},
-			options : {
+
+			options: {
 				responsive : true,
+        		legend: {
+            	display: true,
+            	position: 'bottom',
+            	labels: {
+                	
+            	}
+        		}
 			}
 	});
 

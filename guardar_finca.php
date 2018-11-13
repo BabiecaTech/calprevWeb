@@ -67,6 +67,11 @@ switch ($accion) {
 				echo json_encode($respuesta);
 			}
 		break;
+
+	case 'eliminar':
+		# code...
+	
+		break;
 }
 
 ?>
