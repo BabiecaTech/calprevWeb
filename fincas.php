@@ -12,6 +12,8 @@
 <title>Lista de Fincas</title>
 <!--<link href="css/bootstrap.css" rel="stylesheet" type="text/css">-->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="css/styles.css">
+<!--<link rel="stylesheet" type="text/css" href="css/estilo_tabla.css">-->
 <style>
   .selected{
     cursor: pointer;
@@ -44,10 +46,11 @@
         Nombre: <input type="text" id="txtNameFinca" name="txtNameFinca" class="form-control" required/>
         <button type="button" class="btn btn-success" id="btnAdd" style="float: right; margin-top: 12px"><span class='glyphicon glyphicon-plus'></span></button>
         <button type='button' class='btn btn-danger' id="btnDel" style="float: right; margin-top: 12px"><span class='glyphicon glyphicon-trash'></span></button>
+        <div class="table-responsive">
         <table id="tabla_modal" class="table" >
           <thead>
             <tr>
-              <td>Numero</td>
+              <td>#</td>
               <td>Tipo Viñedo</td>
               <td>Hectareas</td>
             </tr>
@@ -55,6 +58,7 @@
           <tbody></tbody>
           
         </table>
+      </div>
         </div>
         </form>
       </div>
@@ -95,13 +99,14 @@ include("plantilla1.php");
         <div class="panel panel-default">
           <div class="panel-body">
             <a href="map.php"> <button type="button" class="btn btn-success"><span class='glyphicon glyphicon-plus'></span> Agregar</button> </a>
-             <table class="table">
+            <div class="table-responsive">
+             <table class="table" >
               <thead>
                 <th>Nombre</th>
                 <th>Tipo viñedo</th>
                 <th>#Hectaria</th>
               </thead>
-              
+              <tbody>
               <?php
               include("conexion.php");
               $sql="SELECT * FROM fincas";
@@ -147,8 +152,8 @@ include("plantilla1.php");
                     //echo "<td>"; echo $row['id_vinedo']; echo "</td>";
                   //}
 
-                  echo "<td><button type='button' class='btn btn-info' onclick='modificarFinca(".$filas['id']. ")'><span class='glyphicon glyphicon-pencil'></span></button></td>";
-                  echo "<td><button type='button' class='btn btn-danger' onclick='eliminarFinca(".$filas['id'].")'><span class='glyphicon glyphicon-trash'></span></button> </td>";
+                  echo "<td><button type='button' class='btn btn-info' onclick='modificarFinca(".$filas['id']. ")'><span class='glyphicon glyphicon-pencil'></span></button> </a>";
+                  echo "<button type='button' class='btn btn-danger' onclick='eliminarFinca(".$filas['id'].")'><span class='glyphicon glyphicon-trash'></span></button> </td>";
                 echo "</tr>";
               }
 
@@ -161,7 +166,9 @@ include("plantilla1.php");
               }
 
               ?>
+              </tbody>
       </table>
+    </div>
        <!--<button type="button" class="btn btn-success" id="btnAdd"><span class='glyphicon glyphicon-plus'></span> Agregar</button>-->
           </div>
         </div>

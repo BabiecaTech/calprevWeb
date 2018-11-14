@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
 <link href="css/styles.css" rel="stylesheet">
+<!--<link rel="stylesheet" type="text/css" href="css/estilo_tabla.css">-->
 </head>
 <?php
   session_start();
@@ -107,13 +108,14 @@ include("plantilla1.php");
         <div class="panel panel-default">
           <div class="panel-body">
             <button type="button" class="btn btn-success" id="addUser"><span class='glyphicon glyphicon-plus'></span> Nuevo</button>
+            <div class="table-responsive">
              <table class="table">
               <thead>
                 <th>Usuario</th>
                 <th>Email</th>
                 <th>Rol</th>
               </thead>
-  		
+  		<tbody>
   		<?php
       require("conexion.php");
       $sql="SELECT * FROM login WHERE activo = 1 AND id_finca =".$_SESSION['id_finca'];
@@ -131,17 +133,19 @@ include("plantilla1.php");
           }else if ($rol == 1){
             echo "<td>"; echo "Administrador"; echo "</td>";
           }
-          echo "<td><button type='button' class='btn btn-info' onclick='modificarUser(".$filas['id']. ")'><span class='glyphicon glyphicon-pencil'></span></button> </a> </td>";
+          echo "<td><button type='button' class='btn btn-info' onclick='modificarUser(".$filas['id']. ")'><span class='glyphicon glyphicon-pencil'></span></button> </a>";
           if($filas['id']==$_SESSION['id']){
-            echo "<td> <button type='button' class='btn btn-danger' disabled='true'><span class='glyphicon glyphicon-trash'></span></button> </td>";
+            echo "<button type='button' class='btn btn-danger' disabled='true'><span class='glyphicon glyphicon-trash'></span></button> </td>";
           }else{
-          echo "<td> <button type='button' class='btn btn-danger' onclick='eliminarUser(".$filas['id'].")'><span class='glyphicon glyphicon-trash'></span></button> </td>";
+          echo "<button type='button' class='btn btn-danger' onclick='eliminarUser(".$filas['id'].")'><span class='glyphicon glyphicon-trash'></span></button> </td>";
         }
         echo "</tr>";
       }
 
       ?>
+      </tbody>
   	</table>
+  </div>
   </div>
 </div>
 </div>

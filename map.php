@@ -9,6 +9,9 @@
 <html>
 <link href="css/styles.css" rel="stylesheet">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" crossorigin="anonymous">
+  <link href="css/styles.css" rel="stylesheet">
+  <!--<link rel="stylesheet" type="text/css" href="css/estilo_tabla.css">-->
+
 	<style>
   #map {
     height: 60%;
@@ -46,19 +49,21 @@
           <div class="form-group">
         <input type="hidden" id="txtId" name="txtId" />
         Nombre: <input type="text" id="txtName" name="txtName" class="form-control" required/>
+        <div class="table-responsive">
         <table id="tabla" class="table">
           <thead>
             <tr>
               <td>Numero</td>
               <td>Tipo Viñedo</td>
               <td>Hectareas</td>
-              <td><button type="button" class="btn btn-success" id="btnAdd"><span class='glyphicon glyphicon-plus'></span></button></td>
-              <td><button type='button' class='btn btn-danger' id="btnDel"><span class='glyphicon glyphicon-trash'></span></button></td>
+              <button type="button" class="btn btn-success" id="btnAdd"><span class='glyphicon glyphicon-plus'></span></button>
+              <button type='button' class='btn btn-danger' id="btnDel"><span class='glyphicon glyphicon-trash'></span></button>
             </tr>
           </thead>
           <tbody></tbody>
           
         </table>
+      </div>
         </div>
         </form>
       </div>
@@ -98,7 +103,7 @@
               <label class="sr-only" for="lacation"></label>
               <input type="text" class="form-control" id="location" name="location" placeholder="ingrese ubicacion">
               <button class="btn btn-primary" type="button" onclick="buscar();">Buscar</button>
-              <button style="margin-left:10px " class="btn btn-secondary" type="button" onclick="actual();">Localizacion Actual</button>
+              <button style="margin:10px " class="btn btn-secondary" type="button" onclick="actual();">Localizacion Actual</button>
           
             <input type="hidden" id="latitud" name="latitud" />
             <input type="hidden" id="longitud" name="longitud" />
@@ -314,8 +319,7 @@ function toggleBounce() {
   var id_fila_selected=[];
   function agregar(){
     cont++;
-    
-    var fila='<tr class="selected" id="fila'+cont+'" onclick="seleccionar(this.id);"><td>'+cont+'</td><td><select id = "select'+cont+'" name ="select'+cont+'"class="form-control" style="height:45px" required><option value="1">bonarda</option><option value="2">cabernet</option><option value="3">chardonnay</option><option value="4">malbec</option><option value="5">soivignon</option></select></td><td><input type="number" id="hecta'+cont+'" name="hecta'+cont+'" value=0 class="form-control" required></td></tr>';
+    var fila='<tr class="selected" id="fila'+cont+'" onclick="seleccionar(this.id);"><td>'+cont+'</td><td><select id = "select'+cont+'" name ="select'+cont+'"class="form-control" style="height:45px" required><option value="1">Malbec</option><option value="2">Cabernet</option><option value="3">Bonarda</option><option value="4">Syrah</option><option value="5">Tempranillo</option><option value="7">Chardonnay</option><option value="8">Sauvignon</option></select></td><td><input type="number" id="hecta'+cont+'" name="hecta'+cont+'" value=0 class="form-control" required></td></tr>';
     $('#tabla').append(fila);
     
     reordenar();

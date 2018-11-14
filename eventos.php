@@ -28,7 +28,7 @@ switch ($accion) {
 	case 'agregard':
 		# code...
 			$color = obtenerColor($con, $_POST['title']);
-			$sql=$con->prepare("INSERT INTO events(title,descripcion,costo,costo_combustible,color,start,end,asignar,id_user,id_finca) VALUES (:title,:descripcion,:costo,:costo_combustible,:color,:start,:end,:asignar,:id_user),:id_finca");
+			$sql=$con->prepare("INSERT INTO events(title,descripcion,costo,costo_combustible,color,start,end,asignar,id_user,id_finca) VALUES (:title,:descripcion,:costo,:costo_combustible,:color,:start,:end,:asignar,:id_user,:id_finca)");
 
 			$respuesta=$sql->execute(array(
 				'title' =>$_POST['title'],
@@ -38,7 +38,7 @@ switch ($accion) {
 				'color' =>$color,
 				'start' =>$_POST['start'],
 				'end' =>$_POST['end'],
-				'asignar'=>$_POST['asignar'],
+				'asignar' =>$_POST['asignar'],
 				'id_user' =>$_POST['id_user'],
 				'id_finca' =>$_POST['id_finca']
 			 ));

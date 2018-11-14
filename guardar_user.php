@@ -81,8 +81,9 @@ switch ($accion) {
 
 	case 'eliminar':
 		# code...
-		$sql=$con->prepare("DELETE FROM login WHERE id =:ID");
+		$sql=$con->prepare("UPDATE login SET activo=:activo WHERE id =:ID");
 		$respuesta=$sql->execute(array(
+			'activo' =>0,
 			'ID' =>$_POST['id']
 		));
 	

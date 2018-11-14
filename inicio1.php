@@ -10,7 +10,7 @@
   $_SESSION['id_finca']=$id_finca;
 
   function cargarNoti(){
-  	global $id_finca;
+  	global $id_finca, $noti;
   	require("conexion.php");
   	$hoy = date('Y-m-d');
   	$hasta = strtotime ( '+7 day' , strtotime ( $hoy ) ) ;
@@ -18,7 +18,8 @@
   	//echo ($hasta);
   	$sql = "SELECT * FROM notificaciones WHERE fecha >='".$hoy."'AND fecha <= '".$hasta."'AND id_finca = '".$id_finca."'ORDER BY fecha ASC";
   	$respuesta = mysqli_query($conn, $sql);
-  	if ( $respuesta->num_rows > 0){
+  	$noti = $respuesta->num_rows;
+  	if ( $noti > 0){
   	while($fila = mysqli_fetch_assoc($respuesta)){
   		?>
   		<div class="article border-bottom">
@@ -87,11 +88,9 @@
 					
 					</div>
 				</div><!--End .articles-->
-				
-			</div><!--/.col-->
-			
-			<div class="col-md-6">
-				<div class="panel panel-default">
+				<?php
+					if ($noti < 3){?>
+						<div class="panel panel-default">
 					<div class="panel-heading">
 						Calendario
 						
@@ -100,6 +99,28 @@
 						<div id="calendar"></div>
 					</div>
 				</div>
+
+				<?php }
+				?>
+				
+			</div><!--/.col-->
+			
+			<div class="col-md-6">
+
+				<?php 
+					if ($noti >= 3){?>
+						<div class="panel panel-default">
+					<div class="panel-heading">
+						Calendario
+						
+						<span class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span></div>
+					<div class="panel-body">
+						<div id="calendar"></div>
+					</div>
+				</div>
+
+					<?php }
+				?>
 
 					<div class="panel panel-default ">
 					<div class="panel-heading">

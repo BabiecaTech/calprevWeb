@@ -419,7 +419,8 @@ include("plantilla1.php");
                 end:fechaHora+" "+"06:00:00",
                 editable:1,
                 asignar:<?php echo $_SESSION['id']; ?>,
-                id_user:<?php echo $_SESSION['id']; ?>
+                id_user:<?php echo $_SESSION['id']; ?>,
+                id_finca:<?php echo $_SESSION['id_finca']; ?>
               }
       enviarDatos('agregard',t,true);
   }else{
