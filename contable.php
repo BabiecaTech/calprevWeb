@@ -230,11 +230,11 @@
 			Lista de Gastos
 			<span class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span>
 			
-            <button type="button" class="btn btn-danger pull-right" onclick="eliminar()"><span class="glyphicon glyphicon-trash"></span></button>
-            <button type='button' class='btn btn-info pull-right' onclick='modificar()'><span class='glyphicon glyphicon-pencil'></span></button>
-            <button type='button' class='btn btn-success pull-right' onclick='nuevo()'><span class='glyphicon glyphicon-plus'></span></button>
-		</div>
+            </div>
         	<div class="panel-body">
+        		<button type="button" class="btn btn-danger btn-sm" onclick="eliminar()"><span class="glyphicon glyphicon-trash"></span></button>
+            <button type='button' class='btn btn-info btn-sm' onclick='modificar()'><span class='glyphicon glyphicon-pencil'></span></button>
+            <button type='button' class='btn btn-success btn-sm' onclick='nuevo()'><span class='glyphicon glyphicon-plus'></span></button>
         	<div class="table-responsive">
              <table class="table table-hover">
               <thead class="thead-dark">
@@ -266,11 +266,11 @@
 			Lista de Ingresos
 			<span class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span>
 			
-            <button type="button" class="btn btn-danger pull-right" onclick="eliminarI()"><span class="glyphicon glyphicon-trash"></span></button>
-            <button type='button' class='btn btn-info pull-right' onclick='modificarI()'><span class='glyphicon glyphicon-pencil'></span></button>
-            <button type='button' class='btn btn-success pull-right' onclick='nuevoI()'><span class='glyphicon glyphicon-plus'></span></button>
 		</div>
         	<div class="panel-body">
+        		<button type="button" class="btn btn-danger btn-sm" onclick="eliminarI()"><span class="glyphicon glyphicon-trash"></span></button>
+            <button type='button' class='btn btn-info btn-sm' onclick='modificarI()'><span class='glyphicon glyphicon-pencil'></span></button>
+            <button type='button' class='btn btn-success btn-sm' onclick='nuevoI()'><span class='glyphicon glyphicon-plus'></span></button>
         	<div class="table-responsive">
              <table class="table table-hover">
               <thead class="thead-dark">
