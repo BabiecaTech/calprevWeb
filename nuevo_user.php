@@ -58,9 +58,9 @@
 ?>
 <html>
   <head>
-    <title>Registro</title>
-    
-  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Registro</title>
   <link href="css/datepicker3.css" rel="stylesheet">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link href="css/styles.css" rel="stylesheet">
@@ -68,11 +68,9 @@
   </head>
   <body>
     <div class="container">
-      <div id="signupbox" style="margin-top:50px" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+      <div id="signupbox" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
         <div class="panel panel-info">
-          <div class="panel-heading">
-            <div class="panel-title">Reg&iacute;strate </div>
-          </div>  
+          <div class="panel-heading">Registrate</div>  
           
           <div class="panel-body" >
             <form id="signupform" class="form-horizontal" role="form" action="<?php $_SERVER['PHP_SELF'] ?>" method="POST" autocomplete="off">
