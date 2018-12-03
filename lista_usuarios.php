@@ -158,7 +158,7 @@ include("plantilla1.php");
 
 <script type="text/javascript">
     $(document).ready(function() {
-        $('.nav.menu li').eq(4).addClass('active');
+        $('.nav.menu li').eq(5).addClass('active');
       });
 
   </script>

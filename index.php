@@ -4,7 +4,6 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Login</title>
-	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/datepicker3.css" rel="stylesheet">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<link href="css/styles.css" rel="stylesheet">
@@ -34,7 +33,7 @@
 							<input class="btn btn-primary" type="submit" value="INGRESAR">
 							<div class="form-group">
 							
-							No tiene una cuenta ..? <a href="nuevo_user.php">Registrate aquí</a>
+							No tiene una cuenta  <a href="nuevo_user.php">Registrate aquí</a>
 						
 							</div>    
 						</fieldset>

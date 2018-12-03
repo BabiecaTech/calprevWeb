@@ -1,6 +1,6 @@
 <?php
 	
-	function isNull($user, $pass, $pass_con, $email){
+	function isNull($user, $aple, $pass, $pass_con, $email){
 		if(strlen(trim($user)) < 1 || strlen(trim($pass)) < 1 || strlen(trim($pass_con)) < 1 || strlen(trim($email)) < 1)
 		{
 			return true;
@@ -105,12 +105,12 @@
 		}
 	}
 	
-	function registraUsuario($user, $pass, $email, $pasadmin, $rol, $id_finca){
+	function registraUsuario($user, $apel, $pass, $email, $pasadmin, $rol, $id_finca){
 		
 		global $conn;
 		
-		$stmt = $conn->prepare("INSERT INTO login (user, password, email, pasadmin, rol, id_finca) VALUES(?,?,?,?,?,?)");
-		$stmt->bind_param('ssssii', $user, $pass, $email, $pasadmin, $rol, $id_finca);
+		$stmt = $conn->prepare("INSERT INTO login (user, apellido, password, email, pasadmin, rol, id_finca) VALUES(?,?,?,?,?,?,?)");
+		$stmt->bind_param('sssssii', $user, $apel, $pass, $email, $pasadmin, $rol, $id_finca);
 		
 		if ($stmt->execute()){
 			return $conn->insert_id;

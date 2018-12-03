@@ -1,4 +1,14 @@
-<?php
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Registro</title>
+  <link href="css/datepicker3.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link href="css/styles.css" rel="stylesheet">
+  <script src="js/jquery.min.js"></script>
+  </head>
+  <?php
   require 'conexion.php';
   include 'funciones.php';
 
@@ -8,6 +18,7 @@
   {
 
     $usuario = $conn->real_escape_string($_POST['usuario']);
+    $apellido = $conn->real_escape_string($_POST['apellido']);
     $password = $conn->real_escape_string($_POST['password']);
     $con_password = $conn->real_escape_string($_POST['con_password']);
     $email = $conn->real_escape_string($_POST['email']);
@@ -15,7 +26,7 @@
     $rol = 1;
       
   
-    if(isNull($usuario, $password, $con_password, $email))
+    if(isNull($usuario, $apellido, $password, $con_password, $email))
     {
       $errors[] = "Debe llenar todos los campos";
     }
@@ -44,11 +55,12 @@
     if(count($errors) == 0)
     {
       
-        $registro = registraUsuario($usuario,"", $email, $password, $rol, $id_finca);
+        $registro = registraUsuario($usuario,$apellido,"", $email, $password, $rol, $id_finca);
         if($registro > 0){ 
 
-            echo "<h2>Ha sido Registrado Correctamente</h2>";
-            echo "<a href='index.php' >Iniciar Sesion</a>";
+            echo "<h2 style='text-align: center;'> Se ha sido Registrado Correctamente</h2>";
+            echo "<a style='text-align: center;' href='index.php' >Iniciar Sesion</a>";
+            exit;
           
         }else {
           echo "<p>Error al Registar</p>";
@@ -56,21 +68,11 @@
   }
 }
 ?>
-<html>
-  <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Registro</title>
-  <link href="css/datepicker3.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <link href="css/styles.css" rel="stylesheet">
-  <script src="js/jquery.min.js"></script>
-  </head>
   <body>
     <div class="container">
       <div id="signupbox" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
         <div class="panel panel-info">
-          <div class="panel-heading">Registrate</div>  
+          <div class="panel-heading">Registrate </div>  
           
           <div class="panel-body" >
             <form id="signupform" class="form-horizontal" role="form" action="<?php $_SERVER['PHP_SELF'] ?>" method="POST" autocomplete="off">
@@ -81,9 +83,16 @@
               </div>
               
               <div class="form-group">
-                <label for="usuario" class="col-md-3 control-label">Usuario</label>
+                <label for="usuario" class="col-md-3 control-label">Nombre</label>
                 <div class="col-md-9">
-                  <input type="text" class="form-control" name="usuario" placeholder="Usuario" value="<?php if(isset($usuario)) echo $usuario; ?>" required>
+                  <input type="text" class="form-control" name="usuario" placeholder="Nombre" value="<?php if(isset($usuario)) echo $usuario; ?>" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="apellido" class="col-md-3 control-label">Apellido</label>
+                <div class="col-md-9">
+                  <input type="text" class="form-control" name="apellido" placeholder="Apellido" value="<?php if(isset($apellido)) echo $apellido; ?>" required>
                 </div>
               </div>
               
@@ -111,9 +120,10 @@
               <div class="form-group">                             
                 <div class="col-md-9" style="float: right;">
                   <button id="btn-signup" type="submit" class="btn btn-primary">REGISTRAR</button>
-                  <a id="signinlink" href="index.php">Iniciar Sesi&oacute;n</a>
+
                 </div>
               </div>
+              <a style="float: right;" id="signinlink" href="index.php">Iniciar Sesi&oacute;n</a>
             </form>
             <?php echo resultBlock($errors); ?>
           </div>

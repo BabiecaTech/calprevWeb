@@ -9,20 +9,6 @@
 
   $_SESSION['id_finca']=$id_finca;
 
-  function obtenerEgresos(){
-  	global $id_finca;
-  	$con= new PDO("mysql:dbname=calendario;host=localhost","root","");
-  	if ($id_finca<> 0){
-		$arreglo=[];
-
-		$sql=$con->prepare("SELECT SUM(monto) as monto FROM gastos WHERE MONTH(fecha) = 11 AND YEAR(fecha) = 2018 AND id_finca =".$id."");
-			//SELECT SUM(monto) FROM gastos WHERE MONTH(fecha) = 11 AND YEAR(fecha) = 2018
-		$sql->execute();
-		$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
-		$arreglo[]=$resultado[0]['monto'];
-		return $arreglo;
-	}
-  }
   function cargarNoti(){
   	global $id_finca, $noti;
   	require("conexion.php");
@@ -136,20 +122,7 @@
 					<?php }
 				?>
 
-				<div class="panel panel-default ">
-					<div class="panel-heading">
-						Temperatura estimada
-						<span class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span></div>
-					<div class="panel-body">
-						<div class="canvas-wrapper">
-							<!--<canvas class="chart" id="pie-chart" ></canvas>-->
-							<canvas class="chart" id="line-temp" ></canvas>
-						</div>
-	
-					</div>
-				</div>
-
-				<div class="panel panel-default ">
+					<div class="panel panel-default ">
 					<div class="panel-heading">
 						Balance
 						<span class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span></div>
@@ -213,31 +186,45 @@
 
     });
 
-    $.ajax({
-    data: {id_finca: idfinca},
-    url: "datos_grafico.php",
-    method: "post",
-    dataType: "json",
-    success: function(msg) {
-    	console.log(msg);
-       	var meses = new Array ("Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic");
-	var f=new Date();
-	//document.write(f.getDate() + " de " + meses[f.getMonth()] + " de " + f.getFullYear());
-	var i = meses.indexOf(meses[f.getMonth()]);
-	var config = {
+    		var config = {
 			type: 'line',
 			data: {
-				labels: meses.slice(0,i+1),
-				datasets: msg
+				labels: ['enero', 'febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto'],
+				datasets: [{
+					label: 'My First dataset',
+					backgroundColor: window.chartColors.red,
+					borderColor: window.chartColors.red,
+					data: [
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor()
+					],
+					fill: false,
+				}, {
+					label: 'My Second dataset',
+					fill: false,
+					backgroundColor: window.chartColors.blue,
+					borderColor: window.chartColors.blue,
+					data: [
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor()
+					],
+				}]
 			},
 			options: {
-				legend: {
-					position: 'bottom'
-				},
 				responsive: true,
 				title: {
 					display: true,
-					text:f.getFullYear()
+					text: 'Chart.js Line Chart'
 				},
 				tooltips: {
 					mode: 'index',
@@ -248,30 +235,93 @@
 					intersect: true
 				},
 				scales: {
-					/*xAxes: [{
+					xAxes: [{
 						display: true,
 						scaleLabel: {
 							display: true,
-							labelString: 'Mes'
+							labelString: 'Month'
 						}
-					}],*/
+					}],
 					yAxes: [{
 						display: true,
 						scaleLabel: {
 							display: true,
-							labelString: 'Pesos'
+							labelString: 'Value'
 						}
 					}]
 				}
 			}
 		};
+	window.onload = function() {
     var chart = document.getElementById("line-chart").getContext("2d");
-    var myLine = new Chart(chart,config);
-
-
-    }
-});
-
+    var myLine = new Chart(chart,
+    	{
+			type: 'line',
+			data: {
+				labels: ['enero', 'febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto'],
+				datasets: [{
+					label: 'My First dataset',
+					backgroundColor: window.chartColors.red,
+					borderColor: window.chartColors.red,
+					data: [
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor()
+					],
+					fill: false,
+				}, {
+					label: 'My Second dataset',
+					fill: false,
+					backgroundColor: window.chartColors.blue,
+					borderColor: window.chartColors.blue,
+					data: [
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor()
+					],
+				}]
+			},
+			options: {
+				responsive: true,
+				title: {
+					display: true,
+					text: 'Chart.js Line Chart'
+				},
+				tooltips: {
+					mode: 'index',
+					intersect: false,
+				},
+				hover: {
+					mode: 'nearest',
+					intersect: true
+				},
+				scales: {
+					xAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'Month'
+						}
+					}],
+					yAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'Value'
+						}
+					}]
+				}
+			}
+		});
+};
 	/*window.myLine = new Chart(chart).Line(lineChartData, {
 	responsive: true,
 	scaleLineColor: "rgba(0,0,0,.2)",
@@ -321,7 +371,6 @@
 
   });
 
-</script>
 </script>
 
 </body>

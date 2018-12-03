@@ -39,7 +39,7 @@
 
  function cargarIngresos(){
  	require("conexion.php");
-  	$sql = "SELECT ingresos.id, ingresos.fecha, ingresos.monto, ingresos.descripcion, ingresos.id_finca, ingresos.id_user, login.user FROM (ingresos JOIN login ON ingresos.id_user = login.id) WHERE ingresos.id_finca='".$_SESSION['id_finca']."' ORDER BY fecha ASC";
+  	$sql = "SELECT ingresos.id, ingresos.fecha, ingresos.monto, ingresos.descripcion, ingresos.id_finca, ingresos.id_user, login.user FROM (ingresos JOIN login ON ingresos.id_user = login.id) WHERE ingresos.id_finca='".$_SESSION['id_finca']."' ORDER BY fecha DESC";
   	$respuesta = mysqli_query($conn, $sql);
   
   	while($fila = mysqli_fetch_assoc($respuesta)){
@@ -225,7 +225,7 @@
     <div class="row">
 
     <div class="col-lg-12">
-      	<div class="panel panel-default">
+      	<div class="panel panel-default chat">
       		<div class="panel-heading">
 			Lista de Gastos
 			<span class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span>
@@ -261,7 +261,7 @@
     <div class="row">
 
     <div class="col-lg-12">
-      	<div class="panel panel-default">
+      	<div class="panel panel-default chat">
       		<div class="panel-heading">
 			Lista de Ingresos
 			<span class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span>
@@ -303,7 +303,7 @@
 	<script type="text/javascript">
 		$(document).ready(function(){
 
-		$('.nav.menu li').eq(3).addClass('active');
+		$('.nav.menu li').eq(4).addClass('active');
 
     // botones modal gastos
 	    $('#btnModificar').click(function(){
