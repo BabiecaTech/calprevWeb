@@ -105,14 +105,13 @@
 				<?php
 					if ($noti < 3){?>
 						<div class="panel panel-default">
-					<div class="panel-heading">
+						<div class="panel-heading">
 						Calendario
-						
 						<span class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span></div>
-					<div class="panel-body">
+						<div class="panel-body">
 						<div id="calendar"></div>
-					</div>
-				</div>
+						</div>
+						</div>
 
 				<?php }
 				?>

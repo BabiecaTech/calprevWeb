@@ -185,6 +185,12 @@ switch ($accion) {
 			}
 
 		break;
+
+		case 'actualizarNoti':
+			# code...
+			$hoy = date('Y-m-d'); //obtiene fecha actual
+			actualizarNotificaciones($hoy,$con);
+			break;
 }
 
 function lunaCreciente($con, &$arreglo, $select){
@@ -320,26 +326,62 @@ function cargarViento ($con,&$arreglo){
 }
 
 function actualizarNotificaciones ($actual, $con){
+
 	$sql=$con->prepare("DELETE FROM notificaciones WHERE fecha >='".$actual."'");
 	$sql->execute();
+	$inicio='';
+	$fin='';
+	$cant=0;
 	for ($cont_dia = 0; $cont_dia < 7; $cont_dia++){
 		$proxfecha = strtotime ('+'.$cont_dia.' day' , strtotime($actual));
 		$proxfecha = date ( 'Y-m-d' , $proxfecha );
-		$sql1=$con->prepare("SELECT DISTINCT fecha FROM prohoras WHERE fecha = '".$proxfecha."' AND humedad > 60");
+		$sql1=$con->prepare("SELECT DISTINCT fecha FROM prohoras WHERE fecha = '".$proxfecha."' AND humedad >= 60");
 		$sql1->execute();
 		$resp = $sql1->fetchAll(PDO::FETCH_ASSOC);
 		if (count($resp) > 0) {
-			$sql2=$con->prepare("INSERT INTO notificaciones(fecha,titulo,descripcion,id_finca) VALUES (:fecha,:titulo,:descripcion,:id_finca)");
+
+			if ($inicio==''){
+				$inicio= $proxfecha;
+				$cant=1;
+			}else{
+
+				$fin = $proxfecha;
+				$cant++;
+				
+			}
+			echo $cant;
+		}else {
+			if ($cant >= 4){
+				//echo $cant;
+				$sql2=$con->prepare("INSERT INTO notificaciones(fecha,titulo,descripcion,id_finca) VALUES (:fecha,:titulo,:descripcion,:id_finca)");
 
 			$sql2->execute(array(
-				'fecha' =>$proxfecha,
-				'titulo' =>"Alta Humedad",
-				'descripcion' =>"La humedad estara por arriba del 60%",
+				'fecha' =>$inicio,
+				'titulo' =>"Tarea de Sanidad",
+				'descripcion' =>"Recomendacion por humedad mayor a 60% hasta el ".$fin,
 				'id_finca' =>1
 			 ));
+			}
+			if($cant>0){
+				$inicio='';
+				$fin='';
+				$cant=0;
+			}
+			
 		}
 
 	}
+	if ($cant >= 4){
+				//echo $cant;
+				$sql2=$con->prepare("INSERT INTO notificaciones(fecha,titulo,descripcion,id_finca) VALUES (:fecha,:titulo,:descripcion,:id_finca)");
+
+			$sql2->execute(array(
+				'fecha' =>$inicio,
+				'titulo' =>"Tarea de Sanidad",
+				'descripcion' =>"Recomendacion por humedad mayor a 60% hasta el ".$fin,
+				'id_finca' =>1
+			 ));
+			}
 
 }
 
